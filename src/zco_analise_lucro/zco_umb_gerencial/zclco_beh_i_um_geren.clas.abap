@@ -1,0 +1,5 @@
+CLASS zclco_beh_i_um_geren DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zi_co_um_geren.
+ENDCLASS.
+
+CLASS zclco_beh_i_um_geren IMPLEMENTATION.
+ENDCLASS.

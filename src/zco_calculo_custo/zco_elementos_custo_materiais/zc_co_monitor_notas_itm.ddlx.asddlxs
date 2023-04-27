@@ -1,0 +1,208 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: { typeName: 'Monitor NF (Process MR22 e FB50) Item',
+                typeNamePlural: 'Monitor NFs (Process MR22 e FB50) Itens',
+                title: { type: #STANDARD, label: 'Monitor NF CO Item', value: 'NFDocument' } },
+  headerInfo.description.value: 'NFItem',
+  presentationVariant: [{ sortOrder: [{ by: 'NFDocument', direction:  #DESC }] }] }
+
+annotate view ZC_CO_MONITOR_NOTAS_ITM with
+{
+
+  @UI.facet: [
+                { id: 'NFTaxGrp',
+                  purpose: #HEADER,
+                  type: #DATAPOINT_REFERENCE,
+                  position: 10,
+                  targetQualifier: 'NFTaxGrp'
+                },
+                { id: 'NFTaxTyp',
+                  purpose: #HEADER,
+                  type: #DATAPOINT_REFERENCE,
+                  importance: #LOW,
+                  
+                  position: 20,
+                  targetQualifier: 'NFTaxTyp'
+                },
+                { id: 'Center',
+                  purpose: #HEADER,
+                  type: #DATAPOINT_REFERENCE,
+                  position: 30,
+                  targetQualifier: 'Center'
+                },
+                { id: 'LastUserChange',
+                  purpose: #HEADER,
+                  type: #DATAPOINT_REFERENCE,
+                  position: 40,
+                  targetQualifier: 'LastUserChange'
+                },
+                { id: 'LastDateChange',
+                  purpose: #HEADER,
+                  type: #DATAPOINT_REFERENCE,
+                  position: 50,
+                  targetQualifier: 'LastDateChange'
+                },
+                { id: 'LastTimeChange',
+                  purpose: #HEADER,
+                  type: #DATAPOINT_REFERENCE,
+                  position: 60,
+                  targetQualifier: 'LastTimeChange'
+                },
+                { id: 'MessageTextInfor',
+                  purpose: #HEADER,
+                  type: #DATAPOINT_REFERENCE,
+                  position: 70,
+                  targetQualifier: 'MessageTextInfor'
+                },
+                {
+                  id: 'infoGeral',
+                  label: 'Informações Gerais',
+                  type: #COLLECTION,
+                  position: 10
+                },
+                {
+                  label: 'Item',
+                  id: 'NFDocumentData',
+                  purpose: #STANDARD,
+                  type: #FIELDGROUP_REFERENCE,
+                  targetQualifier: 'NFDocumentData',
+                  parentId: 'infoGeral',
+                  position: 10
+                },
+                {
+                  label: 'Outras Informações',
+                  id: 'OutherInfors',
+                  purpose: #STANDARD,
+                  type: #FIELDGROUP_REFERENCE,
+                  targetQualifier: 'OutherInfors',
+                  parentId: 'infoGeral',
+                  position: 20
+                },
+                {
+                  label: 'Processamento MR22',
+                  id: 'ProcessMR22',
+                  purpose: #STANDARD,
+                  type: #FIELDGROUP_REFERENCE,
+                  targetQualifier: 'ProcessMR22',
+                  parentId: 'infoGeral',
+                  position: 30
+                },
+                {
+                  label: 'Processamento FB50',
+                  id: 'ProcessFB50',
+                  purpose: #STANDARD,
+                  type: #FIELDGROUP_REFERENCE,
+                  targetQualifier: 'ProcessFB50',
+                  parentId: 'infoGeral',
+                  position: 40
+                }
+
+     ]
+
+  @UI:{ selectionField: [{ position: 30 }],
+        lineItem:   [{ position: 10, label: 'N° Nota Fiscal', importance: #LOW }]}
+  NFDocument;
+
+  @UI:{ selectionField: [{ position: 40 }],
+        lineItem:       [{ position: 20, importance: #HIGH }] }
+  NFItem;
+
+  @UI:{ selectionField: [{ position: 10 }],
+        lineItem:       [{ position: 30, importance: #HIGH }],
+        dataPoint:      { title: 'Grupo de imposto' } }
+  NFTaxGrp;
+
+  @UI:{ lineItem:   [{ position: 40, importance: #HIGH }],
+        dataPoint:  { title: 'Tipo de imposto' } }
+  NFTaxTyp;
+
+  @UI:{ lineItem:   [{ position: 50, importance: #HIGH }],
+        dataPoint:  { title: 'Centro' } }
+  Center;
+
+  @UI:{ selectionField: [{ position: 20 }],
+        lineItem:       [{ position: 60, importance: #HIGH }],
+        fieldGroup:     [{ position: 10, qualifier: 'NFDocumentData' }] }
+  Material;
+
+  @UI:{ lineItem:   [{ position: 70 }],
+        fieldGroup: [{ position: 20, qualifier: 'NFDocumentData' }] }
+  ValuationType;
+
+  @UI:{ lineItem:   [{ position: 80, importance: #HIGH }],
+        fieldGroup: [{ position: 30, qualifier: 'NFDocumentData' }] }
+  TaxValue;
+
+  @UI:{ lineItem:   [{ position: 90, importance: #LOW }],
+        fieldGroup: [{ position: 40, qualifier: 'NFDocumentData' }] }
+  ReferenceKey;
+
+  @UI:{ lineItem:   [{ position: 100, importance: #LOW }],
+        fieldGroup: [{ position: 10, qualifier: 'OutherInfors' }] }
+  TaxCode;
+
+  @UI:{ lineItem:   [{ position: 110, importance: #LOW }],
+        fieldGroup: [{ position: 20, qualifier: 'OutherInfors' }] }
+  PurchaseOrder;
+
+  @UI:{ lineItem:   [{ position: 120, importance: #LOW }],
+        fieldGroup: [{ position: 30, qualifier: 'OutherInfors' }] }
+  PurchaseOrderItem;
+
+  @UI:{ lineItem:   [{ position: 130, importance: #LOW  }],
+        fieldGroup:   [{ position: 40, qualifier: 'OutherInfors' }] }
+  ReferenceKeyDoc;
+
+  @UI:{ lineItem:   [{ position: 140, importance: #LOW, label: 'Nº documento Contábil' }],
+        fieldGroup: [{ position: 10, qualifier: 'ProcessFB50', label: 'Nº documento Contábil' }] }
+  AccountingDocument;
+
+  @UI:{ lineItem:   [{ position: 150, importance: #LOW, label: 'Ano documento Contábil' }],
+        fieldGroup: [{ position: 20, qualifier: 'ProcessFB50', label: 'Ano documento Contábil' }] }
+  AccountingYear;
+
+  @UI:{ lineItem:   [{ position: 160, importance: #LOW, label: 'N° Documento MR22' }],
+        fieldGroup: [{ position: 10, qualifier: 'ProcessMR22', label: 'N° Documento MR22' }] }
+  MrDocument;
+
+  @UI:{ lineItem:   [{ position: 170, importance: #LOW, label: 'Ano Documento MR22' }],
+        fieldGroup: [{ position: 20, qualifier: 'ProcessMR22', label: 'Ano Documento MR22' }] }
+  MrYear;
+
+  @UI:{ lineItem:   [{ position: 180, importance: #LOW, label: 'N° Doc de Estorno FB50' }],
+        fieldGroup: [{ position: 30, qualifier: 'ProcessFB50', label: 'N° Documento de Estorno FB50' }] }
+  ReversalDocument;
+
+  @UI:{ lineItem:   [{ position: 190, importance: #LOW, label: 'Ano Doc de Estorno FB50' }],
+        fieldGroup: [{ position: 40, qualifier: 'ProcessFB50', label: 'Ano Doc de Estorno FB50' }] }
+  ReversalYear;
+
+  @UI:{ lineItem:   [{ position: 200, importance: #LOW, label: 'N° Doc de Estorno MR22' }],
+        fieldGroup: [{ position: 30, qualifier: 'ProcessMR22', label: 'N° Documento de Estorno MR22' }] }
+  MrRevDocument;
+
+  @UI:{ lineItem:   [{ position: 210, importance: #LOW, label: 'Ano Doc de Estorno MR22' }],
+        fieldGroup: [{ position: 40, qualifier: 'ProcessMR22', label: 'Ano Documento de Estorno MR22' }] }
+  MrRevYear;
+
+  @UI:{ lineItem:   [{ position: 220, importance: #LOW }],
+        dataPoint:  { title: 'Modificado Por' } }
+  LastUserChange;
+  
+  @UI:{ lineItem:   [{ position: 230, importance: #LOW }],
+        dataPoint:  { title: 'Data da Modificação' } }
+  LastDateChange;
+  
+  @UI:{ lineItem:   [{ position: 240, importance: #LOW }],
+        dataPoint:  { title: 'Hora da Modificação' } }
+  LastTimeChange;
+  
+  @UI:{ lineItem:   [{ position: 250, label: 'Mensagem do processamento', criticality: '_NFHeader.Criticality', importance: #LOW }],
+        dataPoint:  { title: 'Mensagem do processamento', criticality: '_NFHeader.Criticality' } }
+  MessageTextInfor;
+
+  @UI:{ hidden: true }
+  SalesDocumentCurrency;
+
+}

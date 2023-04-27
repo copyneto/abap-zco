@@ -1,0 +1,5 @@
+@EndUserText.label: 'Monitor NFs Co - Lançamentos MR22 e FB50'
+define service ZUI_CO_MONITOR_NFS {
+  expose ZC_CO_MONITOR_NOTAS_CAB as MonitorNFCO;
+  expose ZC_CO_MONITOR_NOTAS_ITM as MonitorNFCOITM;
+}

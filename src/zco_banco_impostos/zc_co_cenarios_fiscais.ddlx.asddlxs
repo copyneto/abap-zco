@@ -1,0 +1,115 @@
+@Metadata.layer: #CORE
+
+
+@UI: {
+    headerInfo: { typeName: 'Cadastro',
+                  title: {
+                    type: #STANDARD,
+                    value: 'Codigo'
+                  }, // Defines the value shown in title section
+                  description: {
+                    value: 'ElemCusto'                    
+                  }
+                },
+                presentationVariant: [{ sortOrder: [{ by: 'CreatedAt', direction: #DESC } ] }]
+     }
+
+annotate view ZC_CO_CENARIOS_FISCAIS with
+{
+
+  @UI.facet: [{
+    id:       'BodyFacet',
+    purpose:  #STANDARD,
+    type:     #COLLECTION,
+    label:    'Informações Gerais',
+    position: 10
+  },
+  {
+    label:           'Geral',
+    id:              'Fieldgroup',
+    type:            #IDENTIFICATION_REFERENCE, //#IDENTIFICATION_REFERENCE,
+    purpose:         #STANDARD,
+    parentId:        'BodyFacet', // Referencia ao Facet #COLLECTION
+    //targetQualifier: 'Fieldgroup:Elements', // No targetElement defined - Default target is the entity in which the facet is defined
+    position:        20
+  }]
+
+  @UI: {
+    lineItem: [{ position: 10 }],
+    selectionField: [{ position: 10 }],
+    identification: [{ position: 10 }]
+    //fieldGroup:     [ { qualifier: 'Fieldgroup:Elements', position: 10 } ]
+  }
+  @EndUserText.label: 'Cód. do Cenário'
+  Codigo;
+
+  @UI: {
+    lineItem: [{ position: 20 }],
+    identification: [{ position: 20 }]
+  }
+  @EndUserText.label: 'Elemento de Custo'
+  ElemCusto;
+
+  @UI: {
+    lineItem: [{ position: 25 }],
+    identification: [{ position: 25 }]
+  }
+  @EndUserText.label: 'Sinal'
+  @Consumption.valueHelpDefinition: [ { entity : {name: 'ZI_CO_VH_SINAL', element: 'Sinal' } } ]
+  Sinal;
+
+  @UI: {
+    lineItem: [{ position: 30 }],
+    identification: [{ position: 30 }]
+  }
+  @EndUserText.label: 'Débito'
+  @Consumption.valueHelpDefinition: [ { entity : {name: 'ZI_FI_VH_HKONT', element: 'GlAccount' } } ]
+  Debito;
+
+  @UI: {
+    lineItem: [{ position: 40 }],
+    identification: [{ position: 40 }]
+  }
+  @EndUserText.label: 'Crédito'
+  @Consumption.valueHelpDefinition: [ { entity : {name: 'ZI_FI_VH_HKONT', element: 'GlAccount' } } ]
+  Credito;
+
+  @UI: {
+    lineItem: [{ position: 50 }],
+    identification: [{ position: 50 }]
+  }
+  @EndUserText.label: 'Tipo de Documento'
+  @Consumption.valueHelpDefinition: [ { entity : {name: 'ZI_CA_VH_DOCTYPE', element: 'DocType' } } ]
+  TipoDocumento;
+
+  @UI: {
+    lineItem: [{ position: 60 }],
+    identification: [{ position: 60 }]
+  }
+  @EndUserText.label: 'MR22'
+  Mr22;
+  
+  @UI: {
+    lineItem: [{ position: 70 }],
+    identification: [{ position: 70 }]
+  }
+  @EndUserText.label: 'FB50'
+  Fb50;
+  
+  @UI: {
+    lineItem: [{ position: 80 }],
+    identification: [{ position: 80 }]
+  }
+  @EndUserText.label: 'CO/PA'
+  CoPa; 
+  
+  @UI: {  identification:  [ { position: 90, label: 'Criado Por' } ] }
+  CreatedBy;
+  @UI: {  identification:  [ { position: 91, label: 'Criado Em' } ] }
+  CreatedAt;
+  @UI: {  identification:  [ { position: 92, label: 'Alterado Por' } ] }
+  LastChangedBy;
+  @UI: {  identification:  [ { position: 93, label: 'Alterado Em' } ] }
+  LastChangedAt;
+
+}

@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME>
+     <OBJECT_M>TABL</OBJECT_M>
+     <OBJ_NAME_M>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME_M>
+     <HASH_ID>B6ECFEEACE1E9907AFC7F4A2BA5D9DEAA17CA395</HASH_ID>
+     <ID>&lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_GLOBAL>X</IFR_GLOBAL>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>dtValoresComissao</IFR_NAME>
+     <IFR_NSPCE>http://trescoracoes.com.br/lancamentovalores/valorescomissao</IFR_NSPCE>
+     <IFR_GNSPCE>http://trescoracoes.com.br/lancamentovalores/valorescomissao</IFR_GNSPCE>
+     <GEN_VERS>0005</GEN_VERS>
+     <PREFIX>ZCLCO_</PREFIX>
+     <CATEGORY>ifmtypedef</CATEGORY>
+     <X-ML_NSPCE>http://trescoracoes.com.br/lancamentovalores/valorescomissao</X-ML_NSPCE>
+     <X-ML_NAME>dtValoresComissao</X-ML_NAME>
+     <VERSION_ID>6c2c3d2ad08211ec8fc700000085a0ca</VERSION_ID>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>KEY</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>KEY</OBJ_NAME2>
+     <ID>&lt;element&gt; Key &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>Key</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_OPTNL>X</IFR_OPTNL>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>KEY</R3_NAME>
+     <R3_DATATYP>STRG</R3_DATATYP>
+     <R3_SEQNUM>000002</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>ROWS</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>ROWS</OBJ_NAME2>
+     <OBJECT_R>TTYP</OBJECT_R>
+     <OBJ_NAME_R>ZCLCO_DT_VALORES_COMISSAO__TAB</OBJ_NAME_R>
+     <ID>&lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>Rows</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>L</IFR_TAGTYP>
+     <IFR_MAXOCC>65535</IFR_MAXOCC>
+     <IFR_OPTNL>X</IFR_OPTNL>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>ROWS</R3_NAME>
+     <R3_SEQNUM>000003</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>USER</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>USER</OBJ_NAME2>
+     <ID>&lt;element&gt; User &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>User</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_OPTNL>X</IFR_OPTNL>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>USER</R3_NAME>
+     <R3_DATATYP>STRG</R3_DATATYP>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME>
+     <OBJECT1>TABL</OBJECT1>
+     <OBJ_NAME1>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME1>
+     <OBJECT2>TABL</OBJECT2>
+     <OBJ_NAME2>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME2>
+     <ID>&lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>dtValoresComissao</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>TABL</R3_TYPE>
+     <R3_NAME>ZCLCO_DT_VALORES_COMISSAO</R3_NAME>
+     <R3_TEXT>Proxy Structure (generated)</R3_TEXT>
+     <CATEGORY>ifmtypedef</CATEGORY>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

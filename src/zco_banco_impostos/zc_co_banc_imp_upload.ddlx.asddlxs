@@ -1,0 +1,69 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: { typeName: 'Banco de Impostos via Excel',
+                typeNamePlural: 'Banco de Impostos via Excel',
+                title: { type: #STANDARD, label: 'Arquivo', value: 'FileDirectory' } },
+  headerInfo.description.value: 'Filedirectory',
+  presentationVariant: [{ sortOrder: [{ by: 'CreatedAt', direction:  #DESC }] }] }
+
+annotate view ZC_CO_BANC_IMP_UPLOAD with
+{
+
+  @UI.facet:[ {
+                id: 'DataArquivo',
+                purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 10,
+                targetQualifier: 'CreatedAt'
+              },
+              {
+                id: 'StatusPC',
+                purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 20,
+                targetQualifier: 'Status'
+              },
+              {
+                label: 'Processamentos',
+                id: 'PcBancImp',
+                purpose: #STANDARD,
+                type: #LINEITEM_REFERENCE,
+                targetElement: '_BancImpProcess',
+                position: 20 
+              }
+           ]
+
+  @UI:{ selectionField: [{ position: 10 }],
+        lineItem:       [{ position: 10, label: 'Id do arquivo' }] }
+  @EndUserText.label: 'Id do arquivo'
+  FileDirectory;
+
+  @UI:{ selectionField: [{ position: 20 }],
+        lineItem:       [{ position: 30, label: 'Status', criticality: 'Criticality' },
+                         { type: #FOR_ACTION, dataAction: 'toReverse', label: 'Estornar', position: 30, invocationGrouping: #ISOLATED }],
+        dataPoint:       { title: 'Status', criticality: 'Criticality' } }
+  @EndUserText.label: 'Status'
+  Status;
+
+  @UI:{ selectionField: [{ position: 20 }],
+        lineItem:       [{ position: 20, label: 'Data Importação Arquivo' }],
+        dataPoint:       { title: 'Data Importação Arquivo' } }
+  @EndUserText.label: 'Data Importação Arquivo'
+  CreatedAt;
+
+  @UI:{ selectionField: [{ position: 40 }],
+        lineItem:       [{ position: 40, label: 'Criado Por' }] }
+  @EndUserText.label: 'Criado Por'
+  CreatedBy;
+
+  @UI.hidden: true
+  Guid;
+
+  @UI.hidden: true
+  LastChangedBy;
+
+  @UI.hidden: true
+  LastChangedAt;
+
+}

@@ -1,0 +1,6 @@
+@EndUserText.label: 'Serviço Banco de impostos upload'
+define service ZUI_CO_BANC_IMP_UPLOAD {
+  expose ZC_CO_BANC_IMP_UPLOAD as BancImpUpload;
+  expose ZC_CO_BANC_IMP_PROCESS as BancImpProcess;
+  expose ZC_CO_BANC_IMP_LOG as BancImpLog;
+}

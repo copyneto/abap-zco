@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCLCO_ESTRAT_CUSTOS</CLSNAME>
+    <LANGU>P</LANGU>
+    <DESCRIPT>Classe de implementação para implementação add in ZCLCO_ESTR</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC1</CMPNAME>
+     <SCONAME>CS_KEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC1</CMPNAME>
+     <SCONAME>IS_CKMLPRKEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos) para preços</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC1</CMPNAME>
+     <SCONAME>IV_LOSGR</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Tamanho de lote do cálculo de custos do produto</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC1</CMPNAME>
+     <SCONAME>IV_MENGE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Quantidade</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC1</CMPNAME>
+     <SCONAME>IV_NEGATIVE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Código de um caractere</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>CS_KEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>IS_CKMLPRKEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos) para preços</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>IV_KWERT</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Valor da condição</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>IV_LOSGR</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Tamanho de lote do cálculo de custos do produto</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>IV_MENGE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Quantidade</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>IV_NEGATIVE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Código de um caractere</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>IV_TOTAL</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Campo de custos</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC2</CMPNAME>
+     <SCONAME>IV_VALUE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Montante ou montante do IVA na moeda do tipo de moeda</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>CS_KEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IS_CKMLPRKEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos) para preços</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IV_CONVER</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Taxa de câmbio para determinação do preço</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IV_KWERT</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Valor da condição</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IV_LOSGR</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Tamanho de lote do cálculo de custos do produto</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IV_MENGE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Quantidade</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IV_NEGATIVE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Código de um caractere</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IV_TOTAL</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Campo de custos</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC3</CMPNAME>
+     <SCONAME>IV_VALUE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Montante ou montante do IVA na moeda do tipo de moeda</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC4</CMPNAME>
+     <SCONAME>CS_KEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC4</CMPNAME>
+     <SCONAME>IS_CKMLPRKEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos) para preços</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC4</CMPNAME>
+     <SCONAME>IV_LOSGR</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Tamanho de lote do cálculo de custos do produto</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC4</CMPNAME>
+     <SCONAME>IV_MENGE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Quantidade</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC4</CMPNAME>
+     <SCONAME>IV_NEGATIVE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Código de um caractere</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC4</CMPNAME>
+     <SCONAME>IV_TOTAL</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Campo de custos</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC4</CMPNAME>
+     <SCONAME>IV_VALUE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Montante ou montante do IVA na moeda do tipo de moeda</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC_TOT</CMPNAME>
+     <SCONAME>IS_CKMLPRKEPH</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos) para preços</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC_TOT</CMPNAME>
+     <SCONAME>IV_LOSGR</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Tamanho de lote do cálculo de custos do produto</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC_TOT</CMPNAME>
+     <SCONAME>IV_MENGE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Quantidade</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC_TOT</CMPNAME>
+     <SCONAME>IV_NEGATIVE</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Código de um caractere</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CALC_TOT</CMPNAME>
+     <SCONAME>RV_TOTAL</SCONAME>
+     <LANGU>P</LANGU>
+     <DESCRIPT>Ledger de materiais: estratificação (elementos)</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

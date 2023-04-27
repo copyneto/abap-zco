@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT_M>TABL</OBJECT_M>
+     <OBJ_NAME_M>ZCLCO_DT_VALORES_COMISSAO</OBJ_NAME_M>
+     <HASH_ID>0F455D4CB7E50076FED10308347B7B9E79D50FC8</HASH_ID>
+     <ID>&lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>Rows</IFR_NAME>
+     <IFR_NSPCE>http://trescoracoes.com.br/lancamentovalores/valorescomissao</IFR_NSPCE>
+     <IFR_GNSPCE>http://trescoracoes.com.br/lancamentovalores/valorescomissao</IFR_GNSPCE>
+     <GEN_VERS>0005</GEN_VERS>
+     <PREFIX>ZCLCO_</PREFIX>
+     <CATEGORY>ifmtypedef</CATEGORY>
+     <X-ML_NSPCE>http://trescoracoes.com.br/lancamentovalores/valorescomissao</X-ML_NSPCE>
+     <X-ML_NAME>Rows</X-ML_NAME>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>BUDAT</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>BUDAT</OBJ_NAME2>
+     <ID>&lt;element&gt; BUDAT &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>BUDAT</IFR_NAME>
+     <IFR_TEXT>Data do lançamento</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>date</IFR_XSDTYP>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>BUDAT</R3_NAME>
+     <R3_TEXT>Data do lançamento</R3_TEXT>
+     <R3_DTREF>XSDDATE_D</R3_DTREF>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>BZIRK</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>BZIRK</OBJ_NAME2>
+     <ID>&lt;element&gt; BZIRK &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>BZIRK</IFR_NAME>
+     <IFR_TEXT>Região de Vendas</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_MAXLEN>5</IFR_MAXLEN>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>BZIRK</R3_NAME>
+     <R3_TEXT>Região de Vendas</R3_TEXT>
+     <R3_DATATYP>CHAR</R3_DATATYP>
+     <R3_LENGTH>000005</R3_LENGTH>
+     <R3_SEQNUM>000006</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>VTWEG</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>VTWEG</OBJ_NAME2>
+     <ID>&lt;element&gt; VTWEG &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>VTWEG</IFR_NAME>
+     <IFR_TEXT>Canal de Distribuição</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_MAXLEN>2</IFR_MAXLEN>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>VTWEG</R3_NAME>
+     <R3_TEXT>Canal de Distribuição</R3_TEXT>
+     <R3_DATATYP>CHAR</R3_DATATYP>
+     <R3_LENGTH>000002</R3_LENGTH>
+     <R3_SEQNUM>000005</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>VV004</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>VV004</OBJ_NAME2>
+     <ID>&lt;element&gt; VV004 &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>VV004</IFR_NAME>
+     <IFR_TEXT>Comissão de Venda</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>decimal</IFR_XSDTYP>
+     <IFR_PREC>23</IFR_PREC>
+     <IFR_SCALE>2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>VV004</R3_NAME>
+     <R3_TEXT>Comissão de Venda</R3_TEXT>
+     <R3_DATATYP>DEC</R3_DATATYP>
+     <R3_LENGTH>000023</R3_LENGTH>
+     <R3_DECIMAL>000002</R3_DECIMAL>
+     <R3_SEQNUM>000007</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>WERKS</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>WERKS</OBJ_NAME2>
+     <ID>&lt;element&gt; WERKS &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>WERKS</IFR_NAME>
+     <IFR_TEXT>Centro</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>WERKS</R3_NAME>
+     <R3_TEXT>Centro</R3_TEXT>
+     <R3_DATATYP>STRG</R3_DATATYP>
+     <R3_SEQNUM>000002</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>WWMT1</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>WWMT1</OBJ_NAME2>
+     <ID>&lt;element&gt; WWMT1 &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>WWMT1</IFR_NAME>
+     <IFR_TEXT>Família CL</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_MAXLEN>2</IFR_MAXLEN>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>WWMT1</R3_NAME>
+     <R3_TEXT>Família CL</R3_TEXT>
+     <R3_DATATYP>CHAR</R3_DATATYP>
+     <R3_LENGTH>000002</R3_LENGTH>
+     <R3_SEQNUM>000003</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>WWREP</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>WWREP</OBJ_NAME2>
+     <ID>&lt;element&gt; WWREP &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>WWREP</IFR_NAME>
+     <IFR_TEXT>Período Apuração comissão</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_MAXLEN>10</IFR_MAXLEN>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>WWREP</R3_NAME>
+     <R3_TEXT>Período Apuração comissão</R3_TEXT>
+     <R3_DATATYP>CHAR</R3_DATATYP>
+     <R3_LENGTH>000010</R3_LENGTH>
+     <R3_SEQNUM>000008</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>WWRPS</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>WWRPS</OBJ_NAME2>
+     <ID>&lt;element&gt; WWRPS &lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>WWRPS</IFR_NAME>
+     <IFR_TEXT>Vendedor</IFR_TEXT>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_MAXLEN>10</IFR_MAXLEN>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>WWRPS</R3_NAME>
+     <R3_TEXT>Vendedor</R3_TEXT>
+     <R3_DATATYP>CHAR</R3_DATATYP>
+     <R3_LENGTH>000010</R3_LENGTH>
+     <R3_SEQNUM>000004</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME>
+     <OBJECT1>TABL</OBJECT1>
+     <OBJ_NAME1>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME1>
+     <OBJECT2>TABL</OBJECT2>
+     <OBJ_NAME2>ZCLCO_DT_VALORES_COMISSAO_ROWS</OBJ_NAME2>
+     <ID>&lt;type&gt; Rows &lt;element&gt; Rows &lt;type&gt; dtValoresComissao http://trescoracoes.com.br/lancamentovalores/valorescomissao http://trescoracoes.com.br/lancamentovalores/valorescomissao</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>Rows</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>TABL</R3_TYPE>
+     <R3_NAME>ZCLCO_DT_VALORES_COMISSAO_ROWS</R3_NAME>
+     <R3_TEXT>Proxy Structure (generated)</R3_TEXT>
+     <CATEGORY>ifmtypedef</CATEGORY>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

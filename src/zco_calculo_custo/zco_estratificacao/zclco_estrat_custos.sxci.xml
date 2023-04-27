@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SXCI" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SXCI>
+    <IMPLEMENTATION_DATA>
+     <IMP_NAME>ZCLCO_ESTRAT_CUSTOS</IMP_NAME>
+     <TEXT>Implementação estratificação de custos</TEXT>
+     <IMP_CLASS>ZCLCO_ESTRAT_CUSTOS</IMP_CLASS>
+     <EXIT_NAME>GET_DEFCCS</EXIT_NAME>
+     <INTER_NAME>IF_EX_GET_DEFCCS</INTER_NAME>
+     <ACTIVE>X</ACTIVE>
+    </IMPLEMENTATION_DATA>
+   </SXCI>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,4 @@
+@EndUserText.label: 'Serv. definition ZC_CO_CENARIOS_FISCAIS'
+define service ZUI_CO_CENARIOS_FISCAIS {
+  expose ZC_CO_CENARIOS_FISCAIS;
+}

@@ -1,0 +1,4 @@
+@EndUserText.label: 'Config. ajuste de valor de elemento de custo do material'
+define service ZUI_CO_CFG_ELM_CUSTO_MATERIAL {
+  expose ZC_CFG_ELEMENTO_CUSTO_MATERIAL as Parametros;
+}

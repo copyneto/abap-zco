@@ -1,0 +1,13 @@
+projection;
+
+define behavior for ZC_CO_MONITOR_NOTAS_CAB alias NFHeader
+{
+  use association _NFItem;
+  use action toReprocess;
+  use action toReverse;
+}
+
+define behavior for ZC_CO_MONITOR_NOTAS_ITM alias NFItem
+{
+  use association _NFHeader;
+}

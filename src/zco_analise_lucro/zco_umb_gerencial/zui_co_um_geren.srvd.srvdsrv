@@ -1,0 +1,4 @@
+@EndUserText.label: 'Unidade de Medida Gerencial'
+define service ZUI_CO_UM_GEREN {
+  expose ZC_CO_UM_GEREN;
+}

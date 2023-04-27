@@ -1,0 +1,8 @@
+projection;
+
+define behavior for ZC_CFG_ELEMENTO_CUSTO_MATERIAL alias Parametros
+{
+  use create;
+  use update;
+  use delete;
+}

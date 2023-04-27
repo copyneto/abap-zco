@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+    <MASTERLANG>P</MASTERLANG>
+    <STEXT>Mensagens para monitor de NFs - processamento MR22 e FB50</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>Sem autorização para efetuar ação.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Erro ao processar requisição.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Reprocessamento em andamento.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Estorno em andamento.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Nenhuma nota encontrada para processamento.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Nota está fora do período permitido para lançamento e estorno.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>N.Fiscal está em processamento, favor atualizar para visualizar status.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_MONITOR_NFS</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Nota Fiscal está em processamento por outra execução.</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

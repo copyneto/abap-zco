@@ -1,0 +1,3 @@
+FUNCTION-POOL ZFGCO_BANCO_IMPOSTOS.         "MESSAGE-ID ..
+
+* INCLUDE LZFGCO_BANCO_IMPOSTOSD...          " Local class definition

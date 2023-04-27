@@ -1,0 +1,11 @@
+@EndUserText.label: 'Controle de acesso para leitura dos dados'
+@MappingRole: true
+define role ZC_CO_MONITOR_NOTAS_CAB {
+    grant
+        select
+            on
+                ZC_CO_MONITOR_NOTAS_CAB
+                    where
+                        inheriting conditions from entity zi_co_monitor_notas_cab;
+                        
+}

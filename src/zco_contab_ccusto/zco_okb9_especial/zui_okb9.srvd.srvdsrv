@@ -1,0 +1,4 @@
+@EndUserText.label: 'Serv. Definition OKB9'
+define service ZUI_OKB9 {
+  expose ZI_CO_OKB9;
+}

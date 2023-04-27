@@ -1,0 +1,30 @@
+@Metadata.layer: #CORE
+annotate view ZI_CO_OKB9 with
+{
+  @UI.facet: [ { id:         'OKB9',
+               purpose:       #STANDARD,
+               type:          #IDENTIFICATION_REFERENCE,
+               label:         'Classificações Contábeis Especiais OKB9',
+               position:      10 } ]
+
+  @UI: { selectionField: [{ element: 'bukrs' } ],
+         lineItem:        [ { position: 10 } ] ,
+         identification:  [ { position: 10 } ] }
+  bukrs;
+  @UI: { selectionField: [{ element: 'kstar' } ],
+         lineItem:        [ { position: 20 } ] ,
+         identification:  [ { position: 20 } ] }
+  kstar;
+  @UI: { selectionField: [{ element: 'gsber' } ],
+         lineItem:        [ { position: 30 } ] ,
+         identification:  [ { position: 30 } ] }
+  gsber;
+  @UI: { selectionField: [{ element: 'prctr' } ],
+         lineItem:        [ { position: 40 } ] ,
+         identification:  [ { position: 40 } ] }
+  prctr;
+  @UI: { lineItem:        [ { position: 50 } ] ,
+         identification:  [ { position: 50 } ] }
+  kostl;
+
+}

@@ -1,0 +1,85 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: { typeName: 'Retorno de Mensagem',
+                typeNamePlural: 'Retorno de Mensagens',
+                title: { type: #STANDARD, label: 'Arquivo', value: '_BancImpProcess._BancImpUpload.FileDirectory' } },
+  presentationVariant: [{ sortOrder: [{ by: 'GuidMsg', direction:  #ASC }] }] }
+
+annotate view ZC_CO_BANC_IMP_LOG with
+{
+
+  @UI.facet:[ { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 10,
+                targetQualifier: 'SheetLine'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 20,
+                targetQualifier: 'LastChangedAt'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 30,
+                targetQualifier: 'LastChangedBy'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 40,
+                targetQualifier: 'StatusItem'
+              },
+              {
+                id: 'ProcessamentoLOG',
+                label: 'Log',
+                type: #COLLECTION,
+                position: 10
+              },
+              {
+                label: 'Mensagem',
+                id: 'MSG',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'MSG',
+                parentId: 'ProcessamentoLOG',
+                position: 10
+              }
+            ]
+
+  @UI:{ dataPoint: { title: 'Status', criticality: 'Criticality' } }
+  Status;
+
+  @UI:{ dataPoint: { title: 'Última modificação' } }
+  LastChangedAt;
+
+  @UI:{ dataPoint: { title: 'Modificado por' } }
+  LastChangedBy;
+
+  @UI:{ dataPoint: { title: 'Status do Item', criticality: 'CriticalityItem' } }
+  StatusItem;
+
+  @UI:{ lineItem:       [{ position: 20, label: 'Mensagem' }],
+        fieldGroup:     [{ position: 10, qualifier: 'MSG', label: 'Mensagem' }] }
+  Message;
+
+  @UI:{ lineItem:       [{ position: 10, label: 'Tipo', criticality: 'CriticalityType' }],
+        fieldGroup:     [{ position: 20, qualifier: 'MSG', label: 'Tipo', criticality: 'CriticalityType' }] }
+  Type;
+
+  @UI:{ lineItem:       [{ position: 30, label: 'Criação do log' }],
+        fieldGroup:     [{ position: 30, qualifier: 'MSG', label: 'Criação do log' }] }
+  CreatedAt;
+
+  @UI:{ dataPoint: { title: 'Linha da Planilha' } }
+  SheetLine;
+
+  @UI.hidden: true
+  Guid;
+
+  @UI.hidden: true
+  GuidItem;
+
+  @UI.hidden: true
+  GuidMsg;
+
+}

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Grupo de funções para processo de MT NFs</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZFGCO_PR_MR22_FB50TOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZFGCO_PR_MR22_FB50</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZFGCO_PR_TASK_PR</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Execução MR22 e FB50 para NFs Monitor</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_QNAME</PARAMETER>
+       <TYP>TRFCQOUT-QNAME</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_ACTVT</PARAMETER>
+       <TYP>CHAR2</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_NF</PARAMETER>
+       <TYP>J_1BDOCNUM</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_QNAME</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_ACTVT</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_NF</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFMCO_PR_MR22_FB50</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Execução de MR22 e FB50 para Monitor NFS</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_ACTVT</PARAMETER>
+       <TYP>CHAR2</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_NF</PARAMETER>
+       <TYP>J_1BDOCNUM</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_ACTVT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Componente do nº versão</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_NF</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Nº documento</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

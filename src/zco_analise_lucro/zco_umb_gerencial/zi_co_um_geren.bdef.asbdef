@@ -1,0 +1,32 @@
+managed;
+
+define behavior for ZI_CO_UM_GEREN alias _UmGer
+implementation in class zclco_beh_i_um_geren unique
+persistent table ztco_copa_unmedg
+lock master
+authorization master ( instance )
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+  delete;
+
+  field ( readonly ) LastChangedAt, LastChangedBy, CreatedAt, CreatedBy, LocalLastChangedAt;
+  validation authorityCreate on save { create; }
+
+  mapping for ztco_copa_unmedg
+  {
+    Wwmt1 = wwmt1;
+    Vv030 = vv030;
+    Vv031 = vv031;
+    Vv032 = vv032;
+    Vv030Me = vv030_me;
+    Vv031Me = vv031_me;
+    Vv032Me = vv032_me;
+    CreatedBy = created_by;
+    CreatedAt = created_at;
+    LastChangedBy = last_changed_by;
+    LastChangedAt = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}

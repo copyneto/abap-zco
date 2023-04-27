@@ -1,0 +1,22 @@
+projection;
+
+define behavior for ZC_CO_BANC_IMP_UPLOAD alias BancImpUpload
+{
+
+  use action toProcessUpload;
+  use action toReverse;
+
+  use association _BancImpProcess;
+
+}
+
+define behavior for ZC_CO_BANC_IMP_PROCESS alias BancImpProcess
+{
+
+  use association _BancImpLog;
+
+}
+
+define behavior for ZC_CO_BANC_IMP_LOG alias BancImpLog
+{
+}

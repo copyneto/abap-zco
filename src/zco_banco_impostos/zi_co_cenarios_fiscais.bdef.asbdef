@@ -1,0 +1,33 @@
+managed;
+
+define behavior for ZI_CO_CENARIOS_FISCAIS alias CenFiscalBehavior
+persistent table ztco_banco_imp
+lock master
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+  delete;
+
+  field ( readonly ) LastChangedAt, LastChangedBy, CreatedAt, CreatedBy, LocalLastChangedAt;
+  field ( readonly : update ) Codigo, ElemCusto;
+
+  mapping for ztco_banco_imp
+  {
+    Codigo = codigo;
+    ElemCusto = elem_custo;
+    Mr22 = mr22;
+    Sinal = sinal;
+    Fb50 = fb50;
+    Debito = debito;
+    Credito = credito;
+    TipoDocumento = tipo_documento;
+    CoPa = co_pa;
+    CreatedBy = created_by;
+    CreatedAt = created_at;
+    LastChangedBy = last_changed_by;
+    LastChangedAt = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+
+}

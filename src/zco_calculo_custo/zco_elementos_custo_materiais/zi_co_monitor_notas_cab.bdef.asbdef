@@ -1,0 +1,66 @@
+managed;
+
+define behavior for ZI_CO_MONITOR_NOTAS_CAB alias NFHeader
+implementation in class zclco_i_co_monitor_notas_cab unique
+persistent table ztco_notas_cab
+lock master
+authorization master ( instance )
+{
+
+  association _NFItem;
+
+  action ( features : instance ) toReprocess result [1] $self;
+  action ( features : instance ) toReverse result [1] $self;
+
+  mapping for ztco_notas_cab
+  {
+    NFDocument = DOCNUM;
+    CompanyCode = BUKRS;
+    ReleaseDate = PSTDAT;
+    PartnerID = PARID;
+    NFENumber = NFENUM;
+    Status = STATUS;
+  }
+
+}
+
+define behavior for ZI_CO_MONITOR_NOTAS_ITM alias NFItem
+persistent table ztco_notas_itm
+lock dependent by _NFHeader
+authorization dependent by _NFHeader
+{
+
+  association _NFHeader;
+
+  field ( readonly ) NFDocument;
+
+  mapping for ztco_notas_itm
+  {
+    NFDocument = DOCNUM;
+    NFItem = ITMNUM;
+    NFTaxGrp = TAXGRP;
+    NFTaxTyp = TAXTYP;
+    Center = WERKS;
+    Material = MATNR;
+    ValuationType = BWTAR;
+    TaxValue = TAXVAL;
+    ReferenceKey = REFKEY;
+    TaxCode = MWSKZ;
+    PurchaseOrder = XPED;
+    PurchaseOrderItem = NITEMPED;
+    ReferenceKeyDoc = XBLNR;
+    AccountingDocument = BLN_C_FB;
+    AccountingYear = GJR_C_FB;
+    MrDocument = BLN_C_MR;
+    MrYear = GJR_C_MR;
+    ReversalDocument = BLN_S_FB;
+    ReversalYear = GJR_S_FB;
+    MrRevDocument = BLN_S_MR;
+    MrRevYear = GJR_S_MR;
+    LastUserChange = user_mod;
+    LastDateChange = date_mod;
+    LastTimeChange = time_mod;
+    MessageTextInfor = text_msg;
+  }
+
+}

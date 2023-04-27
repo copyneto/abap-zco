@@ -1,0 +1,35 @@
+managed; // implementation in class zbp_i_cfg_elemento_custo_mater unique;
+
+define behavior for ZI_CFG_ELEMENTO_CUSTO_MATERIAL alias Parametros
+persistent table ztco_cfg_elmcust
+lock master
+
+{
+  // mandatory fields that are required to create
+  field ( mandatory : create ) TaxCode;
+  field ( readonly : update ) TaxCode;
+
+  field ( mandatory : create ) TaxGroup;
+  field ( readonly : update ) TaxGroup;
+
+  field ( mandatory : create ) TaxType;
+  field ( readonly : update ) TaxType;
+
+  create;
+  update;
+  delete;
+
+  mapping for ztco_cfg_elmcust
+  {
+    AccountingDocumentType = blart;
+    CreditAccount = hkont_c;
+    DebitAccount = hkont_d;
+    Element = elemento;
+    Fb50 = fb50;
+    Mr22 = mr22;
+    Sinal = sinal;
+    TaxCode = mwskz;
+    TaxGroup = taxgrp;
+    TaxType = taxtyp;
+  }
+}

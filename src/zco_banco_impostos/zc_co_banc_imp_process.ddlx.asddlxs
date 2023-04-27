@@ -1,0 +1,263 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: { typeName: 'Processamento Banco de Impostos',
+                typeNamePlural: 'Processamentos Banco de Impostos',
+                title: { type: #STANDARD, label: 'Arquivo', value: '_BancImpUpload.FileDirectory' } },
+                presentationVariant: [{ sortOrder: [{ by: 'GuidItem', direction:  #ASC }] }] }
+
+annotate view ZC_CO_BANC_IMP_PROCESS with
+{
+
+  @UI.facet:[ 
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 5,
+                targetQualifier: 'CompanyCode'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 6,
+                targetQualifier: 'Division'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 10,
+                targetQualifier: 'SheetLine'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 20,
+                targetQualifier: 'LastChangedAt'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 30,
+                targetQualifier: 'LastChangedBy'
+              },
+              { purpose: #HEADER,
+                type: #DATAPOINT_REFERENCE,
+                position: 40,
+                targetQualifier: 'StatusItem'
+              },
+              {
+                id: 'ProcessamentoFB50',
+                label: 'FB50',
+                type: #COLLECTION,
+                position: 10
+              },
+              {
+                label: 'ICMS',
+                id: 'FB50ICMS',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'FB50ICMS',
+                parentId: 'ProcessamentoFB50',
+                position: 10
+              },
+              {
+                label: 'ICMS ST',
+                id: 'FB50ICMSST',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'FB50ICMSST',
+                parentId: 'ProcessamentoFB50',
+                position: 20
+              },
+              {
+                label: 'IPI',
+                id: 'FB50IPI',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'FB50IPI',
+                parentId: 'ProcessamentoFB50',
+                position: 30
+              },
+              {
+                id: 'ProcessamentoMR22',
+                label: 'MR22',
+                type: #COLLECTION,
+                position: 11
+              },
+              {
+                label: 'ICMS',
+                id: 'MR22ICMS',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'MR22ICMS',
+                parentId: 'ProcessamentoMR22',
+                position: 10
+              },
+              {
+                label: 'ICMS ST',
+                id: 'MR22ICMSST',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'MR22ICMSST',
+                parentId: 'ProcessamentoMR22',
+                position: 20
+              },
+              {
+                label: 'IPI',
+                id: 'MR22IPI',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'MR22IPI',
+                parentId: 'ProcessamentoMR22',
+                position: 30
+              },
+              {
+                id: 'ProcessamentoCOPA',
+                label: 'CO/PA',
+                type: #COLLECTION,
+                position: 12
+              },
+              {
+                label: 'Documentos CO/PA',
+                id: 'COPA',
+                purpose: #STANDARD,
+                type: #FIELDGROUP_REFERENCE,
+                targetQualifier: 'COPA',
+                parentId: 'ProcessamentoCOPA',
+                position: 10
+              },
+              {
+                label: 'Retorno de Mensagens',
+                id: 'LgBancImp',
+                purpose: #STANDARD,
+                type: #LINEITEM_REFERENCE,
+                targetElement: '_BancImpLog',
+                position: 20
+              }
+            ]
+
+  @UI:{ dataPoint: { title: 'Status', criticality: 'Criticality' } }
+  Status;
+
+  @UI:{ dataPoint: { title: 'Última modificação' } }
+  LastChangedAt;
+
+  @UI:{ dataPoint: { title: 'Modificado por' } }
+  LastChangedBy;
+  
+  @UI:{ lineItem:       [{ position: 10, label: 'Status do Item', criticality: 'CriticalityItem' } ],
+        dataPoint: { title: 'Status do Item', criticality: 'CriticalityItem' } }
+  StatusItem;
+  
+  @UI:{ lineItem:       [{ position: 11, label: 'Linha da planilha' }],
+        dataPoint: { title: 'Linha da Planilha' } }
+  SheetLine;
+  
+  @UI:{ lineItem:       [{ position: 12, label: 'Empresa' }],
+        dataPoint: { title: 'Empresa' } }
+  CompanyCode;
+  
+  @UI:{ lineItem:       [{ position: 13, label: 'Divisão' }],
+        dataPoint: { title: 'Divisão' } }
+  Division;
+
+  @UI:{ lineItem:       [{ position: 20, label: 'Documento FB50 ICMS' }],
+        fieldGroup:     [{ position: 10, qualifier: 'FB50ICMS', label: 'Documento' }] }
+  FbDocument;
+
+  @UI:{ lineItem:       [{ position: 30, label: 'Exercício FB50 ICMS' }],
+        fieldGroup:     [{ position: 20, qualifier: 'FB50ICMS', label: 'Exercício' }] }
+  FbYear;
+  
+  @UI:{ lineItem:       [{ position: 31, label: 'Documento FB50 ICMS ST' }],
+        fieldGroup:     [{ position: 21, qualifier: 'FB50ICMSST', label: 'Documento' }] }
+  FbDocument2;
+
+  @UI:{ lineItem:       [{ position: 32, label: 'Exercício FB50 ICMS ST' }],
+        fieldGroup:     [{ position: 22, qualifier: 'FB50ICMSST', label: 'Exercício' }] }
+  FbYear2;
+  
+  @UI:{ lineItem:       [{ position: 33, label: 'Documento FB50 IPI' }],
+        fieldGroup:     [{ position: 10, qualifier: 'FB50IPI', label: 'Documento' }] }
+  FbDocument3;
+
+  @UI:{ lineItem:       [{ position: 34, label: 'Exercício FB50 IPI' }],
+        fieldGroup:     [{ position: 20, qualifier: 'FB50IPI', label: 'Exercício' }] }
+  FbYear3;
+
+  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'FB50ICMS', label: 'Doc.Estorno' }] }
+  FbDocumentRev;
+
+  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'FB50ICMS', label: 'Exerc.Estorno' }] }
+  FbYearRev;
+  
+  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'FB50ICMSST', label: 'Doc.Estorno' }] }
+  FbDocumentRev2;
+
+  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'FB50ICMSST', label: 'Exerc.Estorno' }] }
+  FbYearRev2;
+  
+  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'FB50IPI', label: 'Doc.Estorno' }] }
+  FbDocumentRev3;
+
+  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'FB50IPI', label: 'Exerc.Estorno' }] }
+  FbYearRev3;
+
+  @UI:{ lineItem:       [{ position: 40, label: 'Documento MR22 ICMS' }],
+        fieldGroup:     [{ position: 10, qualifier: 'MR22ICMS', label: 'Documento' }] }
+  MrDocument;
+
+  @UI:{ lineItem:       [{ position: 50, label: 'Exercício MR22 ICMS' }],
+        fieldGroup:     [{ position: 20, qualifier: 'MR22ICMS', label: 'Exercício' }] }
+  MrYear;
+  
+  @UI:{ lineItem:       [{ position: 51, label: 'Documento MR22 ICMS ST' }],
+        fieldGroup:     [{ position: 10, qualifier: 'MR22ICMSST', label: 'Documento' }] }
+  MrDocument2;
+
+  @UI:{ lineItem:       [{ position: 52, label: 'Exercício MR22 ICMS ST' }],
+        fieldGroup:     [{ position: 20, qualifier: 'MR22ICMSST', label: 'Exercício' }] }
+  MrYear2;
+  
+  @UI:{ lineItem:       [{ position: 53, label: 'Documento MR22 IPI' }],
+        fieldGroup:     [{ position: 10, qualifier: 'MR22IPI', label: 'Documento' }] }
+  MrDocument3;
+
+  @UI:{ lineItem:       [{ position: 54, label: 'Exercício MR22 IPI' }],
+        fieldGroup:     [{ position: 20, qualifier: 'MR22IPI', label: 'Exercício' }] }
+  MrYear3;
+
+  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'MR22ICMS', label: 'Doc.Estorno' }] }
+  MrDocumentRev;
+
+  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'MR22ICMS', label: 'Exerc.Estorno' }] }
+  MrYearRev;
+  
+  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'MR22ICMSST', label: 'Doc.Estorno' }] }
+  MrDocumentRev2;
+
+  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'MR22ICMSST', label: 'Exerc.Estorno' }] }
+  MrYearRev2;
+  
+  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'MR22IPI', label: 'Doc.Estorno' }] }
+  MrDocumentRev3;
+
+  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'MR22ICMSIPI', label: 'Exerc.Estorno' }] }
+  MrYearRev3;
+
+  @UI:{ lineItem:       [{ position: 60, label: 'Documento CO/PA' }],
+        fieldGroup:     [{ position: 10, qualifier: 'COPA', label: 'Documento' }] }
+  CpDocument;
+
+  @UI:{ lineItem:       [{ position: 61, label: 'Exercício CO/PA' }],
+        fieldGroup:     [{ position: 20, qualifier: 'COPA', label: 'Exercício' }] }
+  CpYear;
+
+  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'COPA', label: 'Doc.Estorno' }] }
+  CpDocumentRev;
+
+  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'COPA', label: 'Exerc.Estorno' }] }
+  CpYearRev;
+
+  @UI.hidden: true
+  Guid;
+
+  @UI.hidden: true
+  GuidItem;
+
+}

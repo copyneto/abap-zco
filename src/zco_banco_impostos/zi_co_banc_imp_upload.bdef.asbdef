@@ -1,0 +1,92 @@
+unmanaged;
+
+define behavior for ZI_CO_BANC_IMP_UPLOAD alias BancImpUpload
+implementation in class zcl_co_banc_imp_upload unique
+lock master
+{
+
+  create;
+  update;
+
+  association _BancImpProcess { create; }
+
+  action ( features : instance ) toProcessUpload parameter ZI_CO_TYPE_TOPROCESS;
+
+  action ( features : instance ) toReverse result [1] $self;
+
+  internal action ProcessData parameter ZI_CO_TYPE_TOPROCESS;
+
+  mapping for ztco_banc_imp_up control zsco_mapping_bcimp_up
+  {
+    Guid = guid;
+    FileDirectory = filedirectory;
+    Status = status;
+    CreatedBy = created_by;
+    CreatedAt = created_at;
+    LastChangedBy = last_changed_by;
+    LastChangedAt = last_changed_at;
+  }
+
+}
+
+define behavior for ZI_CO_BANC_IMP_PROCESS alias BancImpProcess
+implementation in class zcl_co_banc_imp_process unique
+{
+
+  update;
+  association _BancImpLog { create; }
+
+  mapping for ztco_banc_imp_pc control zsco_mapping_bcimp_pc
+  {
+    Guid = guid;
+    GuidItem = guiditem;
+    CompanyCode = bukrs;
+    Division   = gsber;
+    StatusItem = status;
+    SheetLine = line;
+    FbDocument = bln_c_fb;
+    FbYear = gjr_c_fb;
+    FbDocument2 = bln_c_fb2;
+    FbYear2 = gjr_c_fb2;
+    FbDocument3 = bln_c_fb3;
+    FbYear3 = gjr_c_fb3;
+    FbDocumentRev = bln_r_fb;
+    FbYearRev = gjr_r_fb;
+    FbDocumentRev2 = bln_r_fb2;
+    FbYearRev2 = gjr_r_fb2;
+    FbDocumentRev3 = bln_r_fb3;
+    FbYearRev3 = gjr_r_fb3;
+    MrDocument = bln_c_mr;
+    MrYear = gjr_c_mr;
+    MrDocument2 = bln_c_mr2;
+    MrYear2 = gjr_c_mr2;
+    MrDocument3 = bln_c_mr3;
+    MrYear3 = gjr_c_mr3;
+    MrDocumentRev = bln_r_mr;
+    MrYearRev = gjr_r_mr;
+    MrDocumentRev2 = bln_r_mr2;
+    MrYearRev2 = gjr_r_mr2;
+    MrDocumentRev3 = bln_r_mr3;
+    MrYearRev3 = gjr_r_mr3;
+    CpDocument = bln_c_cp;
+    CpYear = gjr_c_cp;
+    CpDocumentRev = bln_r_cp;
+    CpYearRev = gjr_r_cp;
+  }
+
+}
+
+define behavior for ZI_CO_BANC_IMP_LOG alias BancImpLog
+{
+
+  mapping for ztco_banc_imp_lg control zsco_mapping_bcimp_lg
+  {
+    Guid = guid;
+    GuidItem = guiditem;
+    GuidMsg = guidmsg;
+    CreatedAt = created_at;
+    Message = message;
+    Type = type;
+  }
+
+}

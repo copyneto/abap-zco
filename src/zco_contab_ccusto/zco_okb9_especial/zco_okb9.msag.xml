@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZCO_OKB9</ARBGB>
+    <MASTERLANG>P</MASTERLANG>
+    <STEXT>Mensagens para processo de Inventário</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>&amp;1&amp;2&amp;3&amp;4</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Documento não encontrado.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Documento já foi cancelado.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Documento liberado, não é possível cancelar.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Falha ao atualizar documento.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Documento cancelado.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Documento de inventário não foi encontrado para continuar com a contagem.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Falha ao salvar mensages.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Formato de arquivo não suportado. Realizar nova carga com formato &quot;xlsx&quot;.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Empresa &amp; não existe.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Classe de custos &amp; não existe.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>Divisão &amp; não existe.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Centro de lucro &amp; não existe.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Material &amp; não existe.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>P</SPRSL>
+     <ARBGB>ZCO_OKB9</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>Falha ao salvar dados de carga.</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

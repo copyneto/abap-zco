@@ -1,0 +1,11 @@
+@EndUserText.label: 'Controle de acesso para leitura dos dados'
+@MappingRole: true
+define role ZI_CO_MONITOR_NOTAS_CAB {
+    grant
+        select
+            on
+                ZI_CO_MONITOR_NOTAS_CAB
+                    where
+                       ( CompanyCode )                       
+                        = aspect pfcg_auth ( Z_MR22_BUK, bukrs, actvt = '03');
+}

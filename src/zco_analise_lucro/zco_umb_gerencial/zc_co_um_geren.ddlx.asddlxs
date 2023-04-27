@@ -1,0 +1,48 @@
+@Metadata.layer: #CORE
+
+@UI: { headerInfo: { typeName: 'ABAP',
+                     title: { value: 'Wwmt1' },
+                     description: { value: 'Wwmt1' },
+                     typeNamePlural: 'Lista ABAP'
+                   }
+     }
+annotate view ZC_CO_UM_GEREN with
+{
+
+  @UI.facet: [
+         { id:          'facet1',
+           purpose:       #STANDARD,
+           type:          #IDENTIFICATION_REFERENCE,
+           label:         'Colaborador',
+           position:      10
+         } ]
+
+  @UI: { lineItem:        [ { position: 10 } ],
+       identification:  [ { position: 10 } ],
+       selectionField:  [ { position: 10 } ] }
+  Wwmt1;
+
+  @UI: { lineItem:        [ { position: 20} ],
+      identification:  [ { position: 20 } ] }
+  Vv030Me;
+
+
+  @UI: { lineItem:        [ { position: 30} ],
+       identification:  [ { position: 30 } ] }
+  Vv031Me;
+
+  @UI: { lineItem:        [ { position: 40} ],
+       identification:  [ { position: 40 } ] }
+  Vv032Me;
+
+  @UI: {  identification:  [ { position: 60, label: 'Criado Por' } ] }
+  CreatedBy;
+  @UI: {  identification:  [ { position: 70, label: 'Criado Em' } ] }
+  CreatedAt;
+  @UI: {  identification:  [ { position: 80, label: 'Alterado Por' } ] }
+  LastChangedBy;
+  @UI: {  identification:  [ { position: 90, label: 'Alterado Em' } ] }
+  LastChangedAt;
+
+
+}

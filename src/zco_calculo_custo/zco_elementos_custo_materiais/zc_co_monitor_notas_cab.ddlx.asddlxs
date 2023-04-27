@@ -1,0 +1,85 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: { typeName: 'Monitor NF (Process MR22 e FB50)',
+                typeNamePlural: 'Monitor NFs (Process MR22 e FB50)',
+                title: { type: #STANDARD, label: 'Monitor NF CO', value: 'NFDocument' } },
+  headerInfo.description.value: 'NFENumber',
+  presentationVariant: [{ sortOrder: [{ by: 'NFDocument', direction:  #DESC }] }] }
+
+annotate view ZC_CO_MONITOR_NOTAS_CAB with
+{
+
+  @UI.facet: [
+                  { id: 'StatusProc',
+                    purpose: #HEADER,
+                    type: #DATAPOINT_REFERENCE,
+                    position: 10,
+                    targetQualifier: 'Status'
+                  },
+                  {
+                    id: 'infoGeral',
+                    label: 'Informações Gerais',
+                    type: #COLLECTION,
+                    position: 10
+                  },
+                  {
+                    label: 'NF',
+                    id: 'NFDocumentData',
+                    purpose: #STANDARD,
+                    type: #FIELDGROUP_REFERENCE,
+                    targetQualifier: 'NFDocumentData',
+                    parentId: 'infoGeral',
+                    position: 10
+                  },
+                  {
+                    label: 'Outras Informações',
+                    id: 'OutherInforData',
+                    purpose: #STANDARD,
+                    type: #FIELDGROUP_REFERENCE,
+                    targetQualifier: 'OutherInforData',
+                    parentId: 'infoGeral',
+                    position: 20
+                  },
+                  {
+                    label: 'Itens da nota',
+                    id: 'ItensNF',
+                    purpose: #STANDARD,
+                    type: #LINEITEM_REFERENCE,
+                    targetElement: '_NFItem',
+                    position: 20 }
+       ]
+
+  @UI:{ selectionField: [{ position: 30 }],
+        lineItem:   [{ position: 10, label: 'N° Nota Fiscal' }],
+        fieldGroup: [{ position: 10, qualifier: 'NFDocumentData' }] }
+  NFDocument;
+
+  @UI:{ selectionField: [{ position: 40 }],
+        lineItem:       [{ position: 20, criticality: 'Criticality' },
+                         { type: #FOR_ACTION, dataAction: 'toReprocess', label: 'Reprocessar', position: 10 },
+                         { type: #FOR_ACTION, dataAction: 'toReverse', label: 'Estornar', position: 20} ],
+        identification: [{ type: #FOR_ACTION, dataAction: 'toReprocess', label: 'Reprocessar', position: 10 },
+                         { type: #FOR_ACTION, dataAction: 'toReverse', label: 'Estornar', position: 20 }],
+        dataPoint:       { title: 'Status', criticality: 'Criticality' } }
+  Status;
+
+  @UI:{ selectionField: [{ position: 10 }],
+        lineItem:       [{ position: 30 }],
+        fieldGroup:     [{ position: 10, qualifier: 'OutherInforData' }] }
+  CompanyCode;
+
+  @UI:{ selectionField: [{ position: 20 }],
+        lineItem:       [{ position: 40 }],
+        fieldGroup:     [{ position: 20, qualifier: 'OutherInforData' }] }
+  ReleaseDate;
+
+  @UI:{ lineItem:   [{ position: 50 }],
+        fieldGroup: [{ position: 30, qualifier: 'OutherInforData' }] }
+  PartnerID;
+
+  @UI:{ lineItem:   [{ position: 60 }],
+        fieldGroup: [{ position: 20, qualifier: 'NFDocumentData' }] }
+  NFENumber;
+
+}
