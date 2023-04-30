@@ -2409,13 +2409,16 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
       IF <fs_cfg_icms> IS NOT ASSIGNED.
 
+        "---Marca como erro
+        me->gv_error = abap_true.
+
         CLEAR me->gs_icms.
 
         "---Marca cabeçalho e item com erro
         me->gs_data-header-status = gc_bc_status-error_pc.
         cs_item-status          = gc_bc_pc_status-itm_nk.
 
-        "---Config. não encontrada para lançamento de &1, código cenário &2 Ele.C &3.
+        "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
         MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icms
                                            |{ cs_item-codigocenario }|
                                            |{ gc_bc_elem_cust-icms }| INTO DATA(lv_message).
@@ -2448,13 +2451,16 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
       IF <fs_cfg_icmsst> IS NOT ASSIGNED.
 
+        "---Marca como erro
+        me->gv_error = abap_true.
+
         CLEAR me->gs_icmsst.
 
         "---Marca cabeçalho e item com erro
         me->gs_data-header-status = gc_bc_status-error_pc.
         cs_item-status          = gc_bc_pc_status-itm_nk.
 
-        "---Config. não encontrada para lançamento de &1, código cenário &2 Ele.C &3.
+        "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
         MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icmsst
                                            |{ cs_item-codigocenario }|
                                            |{ gc_bc_elem_cust-icmsst }| INTO lv_message.
@@ -2487,13 +2493,16 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
       IF <fs_cfg_ipi> IS NOT ASSIGNED.
 
+        "---Marca como erro
+        me->gv_error = abap_true.
+
         CLEAR me->gs_ipi.
 
         "---Marca cabeçalho e item com erro
         me->gs_data-header-status = gc_bc_status-error_pc.
         cs_item-status          = gc_bc_pc_status-itm_nk.
 
-        "---Config. não encontrada para lançamento de &1, código cenário &2 Ele.C &3.
+        "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
         MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-ipi
                                            |{ cs_item-codigocenario }|
                                            |{ gc_bc_elem_cust-ipi }| INTO lv_message.
