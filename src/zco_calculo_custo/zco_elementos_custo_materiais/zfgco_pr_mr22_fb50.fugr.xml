@@ -11,7 +11,6 @@
     <item>
      <FUNCNAME>ZFGCO_PR_TASK_PR</FUNCNAME>
      <REMOTE_CALL>R</REMOTE_CALL>
-     <SHORT_TEXT>Execução MR22 e FB50 para NFs Monitor</SHORT_TEXT>
      <IMPORT>
       <RSIMP>
        <PARAMETER>IV_QNAME</PARAMETER>
@@ -44,7 +43,6 @@
     <item>
      <FUNCNAME>ZFMCO_PR_MR22_FB50</FUNCNAME>
      <REMOTE_CALL>R</REMOTE_CALL>
-     <SHORT_TEXT>Execução de MR22 e FB50 para Monitor NFS</SHORT_TEXT>
      <IMPORT>
       <RSIMP>
        <PARAMETER>IV_ACTVT</PARAMETER>
@@ -59,12 +57,10 @@
       <RSFDO>
        <PARAMETER>IV_ACTVT</PARAMETER>
        <KIND>P</KIND>
-       <STEXT>Componente do nº versão</STEXT>
       </RSFDO>
       <RSFDO>
        <PARAMETER>IV_NF</PARAMETER>
        <KIND>P</KIND>
-       <STEXT>Nº documento</STEXT>
       </RSFDO>
      </DOCUMENTATION>
     </item>
