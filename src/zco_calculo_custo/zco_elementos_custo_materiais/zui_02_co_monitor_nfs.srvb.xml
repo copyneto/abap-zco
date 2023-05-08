@@ -6,6 +6,7 @@
     <METADATA>
      <NAME>ZUI_02_CO_MONITOR_NFS</NAME>
      <TYPE>SRVB/SVB</TYPE>
+     <DESCRIPTION>Monitor NFs Co - Lançamentos MR22 e FB50</DESCRIPTION>
      <LINKS>
       <item>
        <HREF>/sap/bc/adt/businessservices/odatav2/ZUI_02_CO_MONITOR_NFS</HREF>

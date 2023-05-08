@@ -4,7 +4,8 @@
   <asx:values>
    <DCLS>
     <DCLNAME>ZC_CO_MONITOR_NOTAS_CAB</DCLNAME>
-    <DCLLANGUAGE>E</DCLLANGUAGE>
+    <DCLLANGUAGE>P</DCLLANGUAGE>
+    <DDTEXT>Controle de acesso para leitura dos dados</DDTEXT>
    </DCLS>
   </asx:values>
  </asx:abap>

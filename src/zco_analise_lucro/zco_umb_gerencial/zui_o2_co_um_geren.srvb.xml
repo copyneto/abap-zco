@@ -6,6 +6,7 @@
     <METADATA>
      <NAME>ZUI_O2_CO_UM_GEREN</NAME>
      <TYPE>SRVB/SVB</TYPE>
+     <DESCRIPTION>Serviço oData V2 - App UMB</DESCRIPTION>
      <LINKS>
       <item>
        <HREF>/sap/bc/adt/businessservices/odatav2/ZUI_O2_CO_UM_GEREN</HREF>
