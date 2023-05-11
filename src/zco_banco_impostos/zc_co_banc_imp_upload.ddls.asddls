@@ -11,7 +11,6 @@ define root view entity ZC_CO_BANC_IMP_UPLOAD
       Status,
       _Status.Description,
       Criticality,
-//      CreatedAtDate,
       CreatedBy,
       CreatedAt,
       LastChangedBy,

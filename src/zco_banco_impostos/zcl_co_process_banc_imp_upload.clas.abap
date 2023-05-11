@@ -822,7 +822,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     CHECK lr_docnum[] IS NOT INITIAL.
 
     "---Seleciona informações para preenchimento de bapi
-    SELECT FROM j_1bnflin
+    SELECT FROM j_1bnflin                               "#EC CI_SEL_DEL
       FIELDS docnum,
              matnr,
              bwtar,
@@ -855,6 +855,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     CHECK lr_rbeln[] IS NOT INITIAL.
 
     SELECT FROM ce1ar3c                                 "#EC CI_NOFIELD
+                                                        "#EC CI_SEL_DEL
      FIELDS rbeln,
             rposn,
             artnr,
@@ -885,7 +886,11 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
             wwm11,
             wwmt9,
             bwtar,
-            fkart
+            fkart,
+            vtweg,
+            kaufn,
+            segment,
+            vkorg
      WHERE rbeln IN @lr_rbeln
        AND artnr IN @lr_matnr
      INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-ce1ar3c.
@@ -1029,7 +1034,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
       AND lr_gjahr[] IS NOT INITIAL.
 
     "---Seleciona dados adicionais
-    SELECT FROM ce1ar3c                                 "#EC CI_NOFIELD
+    SELECT FROM ce1ar3c "#EC CI_SEL_DEL                           "#EC CI_NOFIELD
      FIELDS belnr,
             gjahr,
             kokrs,
@@ -1066,7 +1071,11 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
             wwm11,
             wwmt9,
             bwtar,
-            fkart
+            fkart,
+            vtweg,
+            kaufn,
+            segment,
+            vkorg
      WHERE belnr IN @lr_belnr
        AND gjahr IN @lr_gjahr
      INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_rv_copa-ce1ar3c.
@@ -1794,35 +1803,39 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
     ENDIF.
 
-    insert_data lv_count 'ARTNR'   cs_item-material.
-    insert_data lv_count 'BRSCH'   <fs_copa>-brsch.
-    insert_data lv_count 'BZIRK'   <fs_copa>-bzirk.
-    insert_data lv_count 'KDGRP'   <fs_copa>-kdgrp.
-    insert_data lv_count 'KMKDGR'  <fs_copa>-kmkdgr.
-    insert_data lv_count 'KMMAKL'  <fs_copa>-kmmakl.
-    insert_data lv_count 'KMVKBU'  <fs_copa>-kmvkbu.
-    insert_data lv_count 'KMVKGR'  <fs_copa>-kmvkgr.
-    insert_data lv_count 'KMVTNR'  <fs_copa>-kmvtnr.
-    insert_data lv_count 'MATKL'   <fs_copa>-matkl.
-    insert_data lv_count 'PRODH'   <fs_copa>-prodh.
-    insert_data lv_count 'VKBUR'   <fs_copa>-vkbur.
-    insert_data lv_count 'VKGRP'   <fs_copa>-vkgrp.
-    insert_data lv_count 'WWMT1'   <fs_copa>-wwmt1.
-    insert_data lv_count 'WWRPS'   <fs_copa>-wwrps.
-    insert_data lv_count 'WWTPC'   <fs_copa>-wwtpc.
-    insert_data lv_count 'WWMT2'   <fs_copa>-wwmt2.
-    insert_data lv_count 'WWMT3'   <fs_copa>-wwmt3.
-    insert_data lv_count 'WWMT4'   <fs_copa>-wwmt4.
-    insert_data lv_count 'WWMT5'   <fs_copa>-wwmt5.
-    insert_data lv_count 'WWREP'   <fs_copa>-wwrep.
-    insert_data lv_count 'KUNRE'   <fs_copa>-kunre.
-    insert_data lv_count 'PARTNER' <fs_copa>-partner.
-    insert_data lv_count 'KUNWE'   <fs_copa>-kunwe.
-    insert_data lv_count 'WWM10'   <fs_copa>-wwm10.
-    insert_data lv_count 'WWM11'   <fs_copa>-wwm11.
-    insert_data lv_count 'WWMT9'   <fs_copa>-wwmt9.
-    insert_data lv_count 'BWTAR'   <fs_copa>-bwtar.
-    insert_data lv_count 'FKART'   <fs_copa>-fkart.
+    insert_data lv_count 'ARTNR'     cs_item-material.
+    insert_data lv_count 'BRSCH'     <fs_copa>-brsch.
+    insert_data lv_count 'BZIRK'     <fs_copa>-bzirk.
+    insert_data lv_count 'KDGRP'     <fs_copa>-kdgrp.
+    insert_data lv_count 'KMKDGR'    <fs_copa>-kmkdgr.
+    insert_data lv_count 'KMMAKL'    <fs_copa>-kmmakl.
+    insert_data lv_count 'KMVKBU'    <fs_copa>-kmvkbu.
+    insert_data lv_count 'KMVKGR'    <fs_copa>-kmvkgr.
+    insert_data lv_count 'KMVTNR'    <fs_copa>-kmvtnr.
+    insert_data lv_count 'MATKL'     <fs_copa>-matkl.
+    insert_data lv_count 'PRODH'     <fs_copa>-prodh.
+    insert_data lv_count 'VKBUR'     <fs_copa>-vkbur.
+    insert_data lv_count 'VKGRP'     <fs_copa>-vkgrp.
+    insert_data lv_count 'WWMT1'     <fs_copa>-wwmt1.
+    insert_data lv_count 'WWRPS'     <fs_copa>-wwrps.
+    insert_data lv_count 'WWTPC'     <fs_copa>-wwtpc.
+    insert_data lv_count 'WWMT2'     <fs_copa>-wwmt2.
+    insert_data lv_count 'WWMT3'     <fs_copa>-wwmt3.
+    insert_data lv_count 'WWMT4'     <fs_copa>-wwmt4.
+    insert_data lv_count 'WWMT5'     <fs_copa>-wwmt5.
+    insert_data lv_count 'WWREP'     <fs_copa>-wwrep.
+    insert_data lv_count 'KUNRE'     <fs_copa>-kunre.
+    insert_data lv_count 'PARTNER'   <fs_copa>-partner.
+    insert_data lv_count 'KUNWE'     <fs_copa>-kunwe.
+    insert_data lv_count 'WWM10'     <fs_copa>-wwm10.
+    insert_data lv_count 'WWM11'     <fs_copa>-wwm11.
+    insert_data lv_count 'WWMT9'     <fs_copa>-wwmt9.
+    insert_data lv_count 'BWTAR'     <fs_copa>-bwtar.
+    insert_data lv_count 'FKART'     <fs_copa>-fkart.
+    insert_data lv_count 'VTWEG'     <fs_copa>-vtweg.
+    insert_data lv_count 'KAUFN'     <fs_copa>-kaufn.
+    insert_data lv_count 'SEGMENT'   <fs_copa>-segment.
+    insert_data lv_count 'VKORG'     <fs_copa>-vkorg.
 
     "---Exporta variável para identificar se será puxado o documento
     EXPORT lv_program = lv_program TO MEMORY ID 'ZBANC_IMP'.
@@ -2282,9 +2295,12 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     DATA(lv_count) = 1.
 
     "---Valores
-    DATA(lv_icms)   = <fs_copa>-vv019 * -1.
-    DATA(lv_icmsst) = <fs_copa>-vv018 * -1.
-    DATA(lv_ipi)    = <fs_copa>-vv026 * -1.
+    DATA(lv_icms)   = <fs_copa>-vv019.
+    lv_icms   = lv_icms * -1.
+    DATA(lv_icmsst) = <fs_copa>-vv018.
+    lv_icmsst = lv_icmsst * -1.
+    DATA(lv_ipi)    = <fs_copa>-vv026.
+    lv_ipi    = lv_ipi * -1.
 
     "---FieldList
     insert_data lv_count 'KOKRS'   <fs_copa>-kokrs.
@@ -2312,35 +2328,39 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
     ENDIF.
 
-    insert_data lv_count 'ARTNR'   <fs_copa>-artnr.
-    insert_data lv_count 'BRSCH'   <fs_copa>-brsch.
-    insert_data lv_count 'BZIRK'   <fs_copa>-bzirk.
-    insert_data lv_count 'KDGRP'   <fs_copa>-kdgrp.
-    insert_data lv_count 'KMKDGR'  <fs_copa>-kmkdgr.
-    insert_data lv_count 'KMMAKL'  <fs_copa>-kmmakl.
-    insert_data lv_count 'KMVKBU'  <fs_copa>-kmvkbu.
-    insert_data lv_count 'KMVKGR'  <fs_copa>-kmvkgr.
-    insert_data lv_count 'KMVTNR'  <fs_copa>-kmvtnr.
-    insert_data lv_count 'MATKL'   <fs_copa>-matkl.
-    insert_data lv_count 'PRODH'   <fs_copa>-prodh.
-    insert_data lv_count 'VKBUR'   <fs_copa>-vkbur.
-    insert_data lv_count 'VKGRP'   <fs_copa>-vkgrp.
-    insert_data lv_count 'WWMT1'   <fs_copa>-wwmt1.
-    insert_data lv_count 'WWRPS'   <fs_copa>-wwrps.
-    insert_data lv_count 'WWTPC'   <fs_copa>-wwtpc.
-    insert_data lv_count 'WWMT2'   <fs_copa>-wwmt2.
-    insert_data lv_count 'WWMT3'   <fs_copa>-wwmt3.
-    insert_data lv_count 'WWMT4'   <fs_copa>-wwmt4.
-    insert_data lv_count 'WWMT5'   <fs_copa>-wwmt5.
-    insert_data lv_count 'WWREP'   <fs_copa>-wwrep.
-    insert_data lv_count 'KUNRE'   <fs_copa>-kunre.
-    insert_data lv_count 'PARTNER' <fs_copa>-partner.
-    insert_data lv_count 'KUNWE'   <fs_copa>-kunwe.
-    insert_data lv_count 'WWM10'   <fs_copa>-wwm10.
-    insert_data lv_count 'WWM11'   <fs_copa>-wwm11.
-    insert_data lv_count 'WWMT9'   <fs_copa>-wwmt9.
-    insert_data lv_count 'BWTAR'   <fs_copa>-bwtar.
-    insert_data lv_count 'FKART'   <fs_copa>-fkart.
+    insert_data lv_count 'ARTNR'     <fs_copa>-artnr.
+    insert_data lv_count 'BRSCH'     <fs_copa>-brsch.
+    insert_data lv_count 'BZIRK'     <fs_copa>-bzirk.
+    insert_data lv_count 'KDGRP'     <fs_copa>-kdgrp.
+    insert_data lv_count 'KMKDGR'    <fs_copa>-kmkdgr.
+    insert_data lv_count 'KMMAKL'    <fs_copa>-kmmakl.
+    insert_data lv_count 'KMVKBU'    <fs_copa>-kmvkbu.
+    insert_data lv_count 'KMVKGR'    <fs_copa>-kmvkgr.
+    insert_data lv_count 'KMVTNR'    <fs_copa>-kmvtnr.
+    insert_data lv_count 'MATKL'     <fs_copa>-matkl.
+    insert_data lv_count 'PRODH'     <fs_copa>-prodh.
+    insert_data lv_count 'VKBUR'     <fs_copa>-vkbur.
+    insert_data lv_count 'VKGRP'     <fs_copa>-vkgrp.
+    insert_data lv_count 'WWMT1'     <fs_copa>-wwmt1.
+    insert_data lv_count 'WWRPS'     <fs_copa>-wwrps.
+    insert_data lv_count 'WWTPC'     <fs_copa>-wwtpc.
+    insert_data lv_count 'WWMT2'     <fs_copa>-wwmt2.
+    insert_data lv_count 'WWMT3'     <fs_copa>-wwmt3.
+    insert_data lv_count 'WWMT4'     <fs_copa>-wwmt4.
+    insert_data lv_count 'WWMT5'     <fs_copa>-wwmt5.
+    insert_data lv_count 'WWREP'     <fs_copa>-wwrep.
+    insert_data lv_count 'KUNRE'     <fs_copa>-kunre.
+    insert_data lv_count 'PARTNER'   <fs_copa>-partner.
+    insert_data lv_count 'KUNWE'     <fs_copa>-kunwe.
+    insert_data lv_count 'WWM10'     <fs_copa>-wwm10.
+    insert_data lv_count 'WWM11'     <fs_copa>-wwm11.
+    insert_data lv_count 'WWMT9'     <fs_copa>-wwmt9.
+    insert_data lv_count 'BWTAR'     <fs_copa>-bwtar.
+    insert_data lv_count 'FKART'     <fs_copa>-fkart.
+    insert_data lv_count 'VTWEG'     <fs_copa>-vtweg.
+    insert_data lv_count 'KAUFN'     <fs_copa>-kaufn.
+    insert_data lv_count 'SEGMENT'   <fs_copa>-segment.
+    insert_data lv_count 'VKORG'     <fs_copa>-vkorg.
 
     "---Exporta variável para identificar se será puxado o documento
     EXPORT lv_program = lv_program TO MEMORY ID 'ZBANC_IMP'.
@@ -2550,7 +2570,15 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
     ELSE.
 
-      LOOP AT it_bapiret ASSIGNING FIELD-SYMBOL(<fs_ret>).
+      DATA(lt_bapiret) = it_bapiret.
+
+      SORT lt_bapiret BY id number type.
+
+      DELETE ADJACENT DUPLICATES FROM lt_bapiret COMPARING id number type.
+
+      SORT lt_bapiret DESCENDING BY type.
+
+      LOOP AT lt_bapiret ASSIGNING FIELD-SYMBOL(<fs_ret>).
 
         APPEND INITIAL LINE TO me->gt_log ASSIGNING <fs_log>.
 
