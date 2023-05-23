@@ -194,7 +194,8 @@
 
         "Se houve movimentação antes do mês anterior ao anterior   e o médio não é ZERO ou teve movimentação no mês anterior e o lançamento de encerramento foi efetuado (Campo XCLOSE = X), usar o médio
 *        IF ( lv_mblnr IS NOT INITIAL AND lv_total <> 0 ) OR ( lv_mblnr1 IS NOT INITIAL AND lv_total <> 0 AND lv_status = lv_70 ).
-        IF ( lv_mblnr IS NOT INITIAL AND lv_total <> 0 ) OR ( lv_mblnr1 IS NOT INITIAL AND lv_total <> 0 AND lv_xclose = lv_x ).
+*        IF ( lv_mblnr IS NOT INITIAL AND lv_total <> 0 ) OR ( lv_mblnr1 IS NOT INITIAL AND lv_total <> 0 AND lv_xclose = lv_x ).
+        IF ( lv_mblnr IS NOT INITIAL AND lv_total <> 0 AND lv_xclose = lv_x ) OR ( lv_mblnr1 IS NOT INITIAL AND lv_total <> 0 AND lv_xclose = lv_x ).
 
           CLEAR: lv_knumv.
           CLEAR: lv_kwert.
