@@ -107,19 +107,12 @@ annotate view ZC_CO_BANC_IMP_PROCESS with
                 position: 30
               },
               {
-                id: 'ProcessamentoCOPA',
-                label: 'CO/PA',
-                type: #COLLECTION,
-                position: 12
-              },
-              {
                 label: 'Documentos CO/PA',
-                id: 'COPA',
+                id: 'CpBancImp',
                 purpose: #STANDARD,
-                type: #FIELDGROUP_REFERENCE,
-                targetQualifier: 'COPA',
-                parentId: 'ProcessamentoCOPA',
-                position: 10
+                type: #LINEITEM_REFERENCE,
+                targetElement: '_BancImpCopa',
+                position: 20
               },
               {
                 label: 'Retorno de Mensagens',
@@ -127,7 +120,7 @@ annotate view ZC_CO_BANC_IMP_PROCESS with
                 purpose: #STANDARD,
                 type: #LINEITEM_REFERENCE,
                 targetElement: '_BancImpLog',
-                position: 20
+                position: 30
               }
             ]
 
@@ -239,20 +232,6 @@ annotate view ZC_CO_BANC_IMP_PROCESS with
 
   @UI:{ fieldGroup:     [{ position: 40, qualifier: 'MR22ICMSIPI', label: 'Exerc.Estorno' }] }
   MrYearRev3;
-
-  @UI:{ lineItem:       [{ position: 60, label: 'Documento CO/PA' }],
-        fieldGroup:     [{ position: 10, qualifier: 'COPA', label: 'Documento' }] }
-  CpDocument;
-
-  @UI:{ lineItem:       [{ position: 61, label: 'Exercício CO/PA' }],
-        fieldGroup:     [{ position: 20, qualifier: 'COPA', label: 'Exercício' }] }
-  CpYear;
-
-  @UI:{ fieldGroup:     [{ position: 30, qualifier: 'COPA', label: 'Doc.Estorno' }] }
-  CpDocumentRev;
-
-  @UI:{ fieldGroup:     [{ position: 40, qualifier: 'COPA', label: 'Exerc.Estorno' }] }
-  CpYearRev;
 
   @UI.hidden: true
   Guid;

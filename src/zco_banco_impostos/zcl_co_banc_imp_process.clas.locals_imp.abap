@@ -7,6 +7,12 @@ CLASS lcl_BancImpProcess DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS read FOR READ
       IMPORTING keys FOR READ BancImpProcess RESULT result.
 
+    METHODS cba_BancImpCopa FOR MODIFY
+      IMPORTING entities_cba FOR CREATE BancImpProcess\_BancImpCopa.
+
+    METHODS rba_BancImpCopa FOR READ
+      IMPORTING keys_rba FOR READ BancImpProcess\_BancImpCopa FULL result_requested RESULT result LINK association_links.
+
     METHODS cba_BancImpLog FOR MODIFY
       IMPORTING entities_cba FOR CREATE BancImpProcess\_BancImpLog.
 
@@ -69,6 +75,14 @@ CLASS lcl_BancImpProcess IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read.
+    RETURN.
+  ENDMETHOD.
+
+  METHOD cba_bancimpcopa.
+    RETURN.
+  ENDMETHOD.
+
+  METHOD rba_bancimpcopa.
     RETURN.
   ENDMETHOD.
 

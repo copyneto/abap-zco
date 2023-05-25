@@ -3,8 +3,7 @@
 @UI: {
   headerInfo: { typeName: 'Retorno de Mensagem',
                 typeNamePlural: 'Retorno de Mensagens',
-                title: { type: #STANDARD, label: 'Arquivo', value: '_BancImpProcess._BancImpUpload.FileDirectory' } },
-  presentationVariant: [{ sortOrder: [{ by: 'GuidMsg', direction:  #ASC }] }] }
+                title: { type: #STANDARD, label: 'Arquivo', value: '_BancImpProcess._BancImpUpload.FileDirectory' } } }
 
 annotate view ZC_CO_BANC_IMP_LOG with
 {

@@ -1,0 +1,32 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: { typeName: 'Documento CO/PA',
+                typeNamePlural: 'Documentos CO/PA',
+                title: { type: #STANDARD, label: 'Arquivo', value: '_BancImpProcess._BancImpUpload.FileDirectory' }} }
+
+annotate view ZC_CO_BANC_IMP_COPA with
+{
+
+  @UI:{ lineItem:       [{ position: 10, label: 'Documento' }] }
+  CpDocument;
+
+  @UI:{ lineItem:       [{ position: 20, label: 'Exercício' }] }
+  CpYear;
+
+  @UI:{ lineItem:       [{ position: 30, label: 'Doc.Estorno' }] }
+  CpDocumentRev;
+
+  @UI:{ lineItem:       [{ position: 40, label: 'Exerc.Estorno' }] }
+  CpYearRev;
+
+  @UI.hidden: true
+  Guid;
+
+  @UI.hidden: true
+  GuidItem;
+
+  @UI.hidden: true
+  GuidCp;
+
+}

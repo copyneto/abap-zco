@@ -23,8 +23,9 @@ CLASS zcl_co_process_banc_imp_upload DEFINITION
            END OF ty_s_nota_pc_copa,
 
            BEGIN OF ty_s_infor_pc_copa,
-             nota    TYPE TABLE OF ty_s_nota_pc_copa WITH DEFAULT KEY,
-             ce1ar3c TYPE TABLE OF ce1ar3c WITH DEFAULT KEY,
+             nota        TYPE TABLE OF ty_s_nota_pc_copa WITH DEFAULT KEY,
+             with_ref    TYPE TABLE OF ce1ar3c WITH DEFAULT KEY, "---Processo com referência
+             without_ref TYPE TABLE OF ce1ar3c WITH DEFAULT KEY, "---Processo sem referência
            END OF ty_s_infor_pc_copa,
 
            BEGIN OF ty_s_bkpf_rv_fb50,
@@ -128,9 +129,12 @@ CLASS zcl_co_process_banc_imp_upload DEFINITION
 
     CONSTANTS:
       BEGIN OF gc_bc_elem_cust,
-        icms   TYPE xblnr  VALUE 'ELEM15', " Elemento de custo para icms
-        icmsst TYPE xblnr  VALUE 'ELEM14', " Elemento de custo para icms st
-        ipi    TYPE xblnr  VALUE 'ELEM21', " Elemento de custo para ipi
+        icms1   TYPE xblnr  VALUE 'ELEM15', " Elemento de custo para icms
+        icms2   TYPE xblnr  VALUE 'ELEM22', " Elemento de custo para icms
+        icms3   TYPE xblnr  VALUE 'ELEM13', " Elemento de custo para icms
+        icmsst1 TYPE xblnr  VALUE 'ELEM14', " Elemento de custo para icms st
+        icmsst2 TYPE xblnr  VALUE 'ELEM23', " Elemento de custo para icms st
+        ipi     TYPE xblnr  VALUE 'ELEM21', " Elemento de custo para ipi
       END OF gc_bc_elem_cust.
 
     METHODS get_data IMPORTING iv_sheet_guid  TYPE sysuuid_x16
@@ -724,6 +728,22 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
     ENDIF.
 
+    IF rs_data-item IS NOT INITIAL.
+
+      "---Co/Pa
+      SELECT FROM ztco_banc_imp_cp
+       FIELDS guid,
+              guiditem,
+              guidcp,
+              bln_c_cp,
+              gjr_c_cp,
+              bln_r_cp,
+              gjr_r_cp
+      WHERE guid = @iv_sheet_guid
+      INTO CORRESPONDING FIELDS OF TABLE @rs_data-copa.
+
+    ENDIF.
+
   ENDMETHOD.
 
   METHOD get_scenarios_process_config.
@@ -780,9 +800,13 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     "---Variáveis
     DATA: lr_docnum TYPE RANGE OF j_1bnflin-docnum,
           lr_matnr  TYPE RANGE OF j_1bnflin-matnr,
+          lr_bwtar  TYPE RANGE OF j_1bnflin-bwtar,
           lr_rbeln  TYPE RANGE OF ce1ar3c-rbeln,
-          lr_bwtar  TYPE RANGE OF j_1bnflin-bwtar.
+          lr_werks  TYPE RANGE OF ce1ar3c-werks,
+          lr_gsber  TYPE RANGE OF ce1ar3c-gsber,
+          lr_perio  TYPE RANGE OF ce1ar3c-perio.
 
+    "---Busca dados adicionais para lançamento de co/pa com referência
     lr_docnum = VALUE #( FOR ls_item IN me->gs_data-item
                            FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
                                                          AND   co_pa  = abap_true )
@@ -819,87 +843,190 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     DELETE ADJACENT DUPLICATES FROM lr_bwtar COMPARING low.
     DELETE lr_bwtar WHERE low IS INITIAL.                "#EC CI_STDSEQ
 
-    CHECK lr_docnum[] IS NOT INITIAL.
+    IF lr_docnum[] IS NOT INITIAL.
 
-    "---Seleciona informações para preenchimento de bapi
-    SELECT FROM j_1bnflin                               "#EC CI_SEL_DEL
-      FIELDS docnum,
-             matnr,
-             bwtar,
-             refkey
-      WHERE docnum IN @lr_docnum
-        AND matnr  IN @lr_matnr
-        AND bwtar  IN @lr_bwtar
-      INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-nota.
+      "---Seleciona informações para preenchimento de bapi
+      SELECT FROM j_1bnflin                             "#EC CI_SEL_DEL
+        FIELDS docnum,
+               matnr,
+               bwtar,
+               refkey
+        WHERE docnum IN @lr_docnum
+          AND matnr  IN @lr_matnr
+          AND bwtar  IN @lr_bwtar
+        INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-nota.
 
-    SORT me->gs_inf_pc_copa-nota BY docnum
-                                    matnr
-                                    bwtar.
+      SORT me->gs_inf_pc_copa-nota BY docnum
+                                      matnr
+                                      bwtar.
 
-    DELETE ADJACENT DUPLICATES FROM me->gs_inf_pc_copa-nota COMPARING docnum
-                                                                      matnr
-                                                                      bwtar.
+      DELETE ADJACENT DUPLICATES FROM me->gs_inf_pc_copa-nota COMPARING docnum
+                                                                        matnr
+                                                                        bwtar.
 
-    DELETE me->gs_inf_pc_copa-nota WHERE refkey IS INITIAL. "#EC CI_STDSEQ
+      DELETE me->gs_inf_pc_copa-nota WHERE refkey IS INITIAL. "#EC CI_STDSEQ
 
-    lr_rbeln = VALUE #( FOR ls_nota IN me->gs_inf_pc_copa-nota
-                           ( option = 'EQ'
-                             sign   = 'I'
-                             low    = ls_nota-refkey(10) ) ).
+      lr_rbeln = VALUE #( FOR ls_nota IN me->gs_inf_pc_copa-nota
+                             ( option = 'EQ'
+                               sign   = 'I'
+                               low    = ls_nota-refkey(10) ) ).
 
-    SORT lr_rbeln BY low.
+      SORT lr_rbeln BY low.
 
-    DELETE ADJACENT DUPLICATES FROM lr_rbeln COMPARING low.
-    DELETE lr_rbeln WHERE low IS INITIAL.                "#EC CI_STDSEQ
+      DELETE ADJACENT DUPLICATES FROM lr_rbeln COMPARING low.
+      DELETE lr_rbeln WHERE low IS INITIAL.              "#EC CI_STDSEQ
 
-    CHECK lr_rbeln[] IS NOT INITIAL.
+      IF lr_rbeln[] IS NOT INITIAL.
 
-    SELECT FROM ce1ar3c                                 "#EC CI_NOFIELD
+        SELECT FROM ce1ar3c                             "#EC CI_NOFIELD
                                                         "#EC CI_SEL_DEL
-     FIELDS rbeln,
-            rposn,
-            artnr,
-            brsch,
-            bzirk,
-            kdgrp,
-            kmkdgr,
-            kmmakl,
-            kmvkbu,
-            kmvkgr,
-            kmvtnr,
-            matkl,
-            prodh,
-            vkbur,
-            vkgrp,
-            wwmt1,
-            wwrps,
-            wwtpc,
-            wwmt2,
-            wwmt3,
-            wwmt4,
-            wwmt5,
-            wwrep,
-            kunre,
-            partner,
-            kunwe,
-            wwm10,
-            wwm11,
-            wwmt9,
-            bwtar,
-            fkart,
-            vtweg,
-            kaufn,
-            segment,
-            vkorg
-     WHERE rbeln IN @lr_rbeln
-       AND artnr IN @lr_matnr
-     INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-ce1ar3c.
+         FIELDS rbeln,
+                rposn,
+                paledger,
+                vrgar,
+                artnr,
+                bwtar,
+                fkart,
+                werks,
+                gsber,
+                brsch,
+                bzirk,
+                kdgrp,
+                kmkdgr,
+                kmmakl,
+                kmvkbu,
+                kmvkgr,
+                kmvtnr,
+                matkl,
+                prodh,
+                vkbur,
+                vkgrp,
+                wwmt1,
+                wwrps,
+                wwtpc,
+                wwmt2,
+                wwmt3,
+                wwmt4,
+                wwmt5,
+                wwrep,
+                kunre,
+                partner,
+                kunwe,
+                wwm10,
+                wwm11,
+                wwmt9,
+                vtweg,
+                kaufn,
+                segment,
+                vkorg
+         WHERE rbeln IN @lr_rbeln
+           AND artnr IN @lr_matnr
 
-    SORT me->gs_inf_pc_copa-ce1ar3c BY rbeln
-                                       artnr.
+         INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-with_ref.
 
-    DELETE ADJACENT DUPLICATES FROM me->gs_inf_pc_copa-ce1ar3c COMPARING rbeln
-                                                                         artnr.
+        SORT me->gs_inf_pc_copa-with_ref BY rbeln
+                                           artnr.
+
+        DELETE ADJACENT DUPLICATES FROM me->gs_inf_pc_copa-with_ref COMPARING rbeln
+                                                                             artnr.
+
+      ENDIF.
+
+      "---Busca dados adicionais para lançamento de co/pa sem referência
+      lr_perio = VALUE #( FOR ls_item IN me->gs_data-item
+                             FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
+                                                           AND   co_pa  = abap_true )
+                              ( option = 'EQ'
+                                sign   = 'I'
+                                low    = ls_item-data ) ).
+
+      SORT lr_perio BY low.
+
+      DELETE ADJACENT DUPLICATES FROM lr_perio COMPARING low.
+      DELETE lr_perio WHERE low IS INITIAL.              "#EC CI_STDSEQ
+
+      "---Busca dados adicionais para lançamento de co/pa sem referência
+      lr_werks = VALUE #( FOR ls_item IN me->gs_data-item
+                             FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
+                                                           AND   co_pa  = abap_true )
+                              ( option = 'EQ'
+                                sign   = 'I'
+                                low    = ls_item-centro ) ).
+
+      SORT lr_werks BY low.
+
+      DELETE ADJACENT DUPLICATES FROM lr_werks COMPARING low.
+      DELETE lr_werks WHERE low IS INITIAL.              "#EC CI_STDSEQ
+
+      "---Busca dados adicionais para lançamento de co/pa sem referência
+      lr_gsber = VALUE #( FOR ls_item IN me->gs_data-item
+                             FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
+                                                           AND   co_pa  = abap_true )
+                              ( option = 'EQ'
+                                sign   = 'I'
+                                low    = ls_item-divisao ) ).
+
+      SORT lr_gsber BY low.
+
+      DELETE ADJACENT DUPLICATES FROM lr_gsber COMPARING low.
+      DELETE lr_gsber WHERE low IS INITIAL.              "#EC CI_STDSEQ
+
+      SELECT FROM ce1ar3c                               "#EC CI_NOFIELD
+                                                        "#EC CI_SEL_DEL
+         FIELDS rbeln,
+                rposn,
+                paledger,
+                vrgar,
+                artnr,
+                bwtar,
+                fkart,
+                werks,
+                gsber,
+                brsch,
+                bzirk,
+                kdgrp,
+                kmkdgr,
+                kmmakl,
+                kmvkbu,
+                kmvkgr,
+                kmvtnr,
+                matkl,
+                prodh,
+                vkbur,
+                vkgrp,
+                wwmt1,
+                wwrps,
+                wwtpc,
+                wwmt2,
+                wwmt3,
+                wwmt4,
+                wwmt5,
+                wwrep,
+                kunre,
+                partner,
+                kunwe,
+                wwm10,
+                wwm11,
+                wwmt9,
+                vtweg,
+                kaufn,
+                segment,
+                vkorg
+         WHERE paledger  = '10'
+           AND vrgar     = 'F'
+           AND sto_belnr = ''
+           AND artnr IN @lr_matnr
+           AND fkart IN ('Z001', 'Z002', 'Z003', 'Z004', 'Z005',
+                         'Z007', 'Z008', 'Z009', 'Z010', 'Z014',
+                         'Z015', 'Z018', 'Z019', 'Z020', 'Z021',
+                         'Z025', 'Z026', 'Z099' )
+           AND bwtar IN @lr_bwtar
+           AND werks IN @lr_werks
+           AND gsber IN @lr_gsber
+
+         APPENDING CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-without_ref.
+
+    ENDIF.
 
   ENDMETHOD.
 
@@ -1739,7 +1866,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     ENDIF.
 
     "---Busca dados CO/PA
-    ASSIGN me->gs_inf_pc_copa-ce1ar3c[ rbeln  = <fs_nota>-refkey "#EC CI_STDSEQ
+    ASSIGN me->gs_inf_pc_copa-with_ref[ rbeln  = <fs_nota>-refkey "#EC CI_STDSEQ
                                        artnr  = <fs_nota>-matnr  ] TO FIELD-SYMBOL(<fs_copa>).
 
     IF <fs_copa> IS NOT ASSIGNED.
@@ -2425,7 +2552,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     IF cs_item-valoricms IS NOT INITIAL.
 
       ASSIGN me->gt_cfg[ codigo     = cs_item-codigocenario "#EC CI_STDSEQ
-                         elem_custo = gc_bc_elem_cust-icms    ] TO FIELD-SYMBOL(<fs_cfg_icms>).
+                         elem_custo = gc_bc_elem_cust-icms1    ] TO FIELD-SYMBOL(<fs_cfg_icms>).
 
       IF <fs_cfg_icms> IS NOT ASSIGNED.
 
@@ -2441,7 +2568,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
         "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
         MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icms
                                            |{ cs_item-codigocenario }|
-                                           |{ gc_bc_elem_cust-icms }| INTO DATA(lv_message).
+                                           |{ gc_bc_elem_cust-icms1 }| INTO DATA(lv_message).
 
         me->insert_log(
           EXPORTING
@@ -2467,7 +2594,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     IF cs_item-valoricmsst IS NOT INITIAL.
 
       ASSIGN me->gt_cfg[ codigo     = cs_item-codigocenario "#EC CI_STDSEQ
-                         elem_custo = gc_bc_elem_cust-icmsst ] TO FIELD-SYMBOL(<fs_cfg_icmsst>).
+                         elem_custo = gc_bc_elem_cust-icmsst1 ] TO FIELD-SYMBOL(<fs_cfg_icmsst>).
 
       IF <fs_cfg_icmsst> IS NOT ASSIGNED.
 
@@ -2483,7 +2610,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
         "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
         MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icmsst
                                            |{ cs_item-codigocenario }|
-                                           |{ gc_bc_elem_cust-icmsst }| INTO lv_message.
+                                           |{ gc_bc_elem_cust-icmsst1 }| INTO lv_message.
 
         me->insert_log(
           EXPORTING

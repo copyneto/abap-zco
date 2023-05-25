@@ -282,8 +282,6 @@ CLASS lcl_BancImpUpload IMPLEMENTATION.
     insert_field ls_key_fields-%control-MrYear2        ',MrYear2'.
     insert_field ls_key_fields-%control-MrDocument3    ',MrDocument3'.
     insert_field ls_key_fields-%control-MrYear3        ',MrYear3'.
-    insert_field ls_key_fields-%control-CpDocument     ',CpDocument'.
-    insert_field ls_key_fields-%control-CpYear         ',CpYear'.
 
     insert_field ls_key_fields-%control-FbDocumentRev  ',FbDocumentRev'.
     insert_field ls_key_fields-%control-FbYearRev      ',FbYearRev'.
@@ -297,8 +295,6 @@ CLASS lcl_BancImpUpload IMPLEMENTATION.
     insert_field ls_key_fields-%control-MrYearRev2     ',MrYearRev2'.
     insert_field ls_key_fields-%control-MrDocumentRev3 ',MrDocumentRev3'.
     insert_field ls_key_fields-%control-MrYearRev3     ',MrYearRev3'.
-    insert_field ls_key_fields-%control-CpDocumentRev  ',CpDocumentRev'.
-    insert_field ls_key_fields-%control-CpYearRev      ',CpYearRev'.
 
     CHECK lr_guid[] IS NOT INITIAL.
 

@@ -48,12 +48,9 @@ define view entity ZC_CO_BANC_IMP_PROCESS
       MrYearRev2,                         //MR22 Estorno Ano ICMS ST
       MrDocumentRev3,                     //MR22 Estorno IPI
       MrYearRev3,                         //MR22 Estorno Ano ICMS IPI
-      CpDocument,                         //CO/PA
-      CpYear,                             //Ano
-      CpDocumentRev,                      //CO/PA Estorno
-      CpYearRev,                          //CO/PA Estorno Ano
 
       //*Associações*//
+      _BancImpCopa   : redirected to composition child ZC_CO_BANC_IMP_COPA,
       _BancImpLog    : redirected to composition child ZC_CO_BANC_IMP_LOG,
       _BancImpUpload : redirected to parent ZC_CO_BANC_IMP_UPLOAD,
       _StatusItem

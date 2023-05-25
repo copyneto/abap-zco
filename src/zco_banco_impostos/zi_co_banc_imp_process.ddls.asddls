@@ -2,7 +2,9 @@
 @EndUserText.label: 'Processamento Banco de Impostos'
 define view entity ZI_CO_BANC_IMP_PROCESS
   as select from ztco_banc_imp_pc as BancImpProcess
-  //Composição de retornod do processamento
+  //Composição de Co/Pa's criados
+  composition [0..*] of ZI_CO_BANC_IMP_COPA         as _BancImpCopa
+  //Composição de retorno do processamento
   composition [0..*] of ZI_CO_BANC_IMP_LOG          as _BancImpLog
   //Controle do Upload
   association        to parent ZI_CO_BANC_IMP_UPLOAD       as _BancImpUpload on $projection.Guid = _BancImpUpload.Guid
@@ -53,12 +55,9 @@ define view entity ZI_CO_BANC_IMP_PROCESS
       gjr_r_mr2             as MrYearRev2,
       bln_r_mr3             as MrDocumentRev3,  //Rev MR22 para IPI
       gjr_r_mr3             as MrYearRev3,
-      bln_c_cp              as CpDocument,
-      gjr_c_cp              as CpYear,
-      bln_r_cp              as CpDocumentRev,
-      gjr_r_cp              as CpYearRev,
 
       //*Associações*//
+      _BancImpCopa,
       _BancImpLog,
       _BancImpUpload,
       _StatusItem,
