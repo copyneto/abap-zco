@@ -884,6 +884,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                 rposn,
                 paledger,
                 vrgar,
+                perio,
                 artnr,
                 bwtar,
                 fkart,
@@ -918,7 +919,8 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                 vtweg,
                 kaufn,
                 segment,
-                vkorg
+                vkorg,
+                erlos
          WHERE rbeln IN @lr_rbeln
            AND artnr IN @lr_matnr
 
@@ -938,7 +940,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                                                            AND   co_pa  = abap_true )
                               ( option = 'EQ'
                                 sign   = 'I'
-                                low    = ls_item-data ) ).
+                                low    = |{ ls_item-data(4) }0{ ls_item-data+4(2) }| ) ).
 
       SORT lr_perio BY low.
 
@@ -977,6 +979,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                 rposn,
                 paledger,
                 vrgar,
+                perio,
                 artnr,
                 bwtar,
                 fkart,
@@ -1011,10 +1014,12 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                 vtweg,
                 kaufn,
                 segment,
-                vkorg
+                vkorg,
+                erlos
          WHERE paledger  = '10'
            AND vrgar     = 'F'
            AND sto_belnr = ''
+           AND perio IN @lr_perio
            AND artnr IN @lr_matnr
            AND fkart IN ('Z001', 'Z002', 'Z003', 'Z004', 'Z005',
                          'Z007', 'Z008', 'Z009', 'Z010', 'Z014',
@@ -1024,7 +1029,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
            AND werks IN @lr_werks
            AND gsber IN @lr_gsber
 
-         APPENDING CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-without_ref.
+         INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_pc_copa-without_ref.
 
     ENDIF.
 
@@ -1136,10 +1141,10 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
           lr_awkey TYPE RANGE OF awkey.
 
     "---Ranger do documento
-    lr_belnr = VALUE #( FOR ls_item IN me->gs_data-item WHERE ( bln_c_cp  IS NOT INITIAL ) "#EC CI_STDSEQ
+    lr_belnr = VALUE #( FOR <fs_item> IN me->gs_data-copa WHERE ( bln_c_cp  IS NOT INITIAL ) "#EC CI_STDSEQ
                             ( option = 'EQ'              "#EC CI_STDSEQ
                               sign   = 'I'               "#EC CI_STDSEQ
-                              low    = ls_item-bln_c_cp ) ). "#EC CI_STDSEQ
+                              low    = <fs_item>-bln_c_cp ) ). "#EC CI_STDSEQ
 
     SORT lr_belnr BY low.
 
@@ -1147,10 +1152,10 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     DELETE lr_belnr WHERE low IS INITIAL.                "#EC CI_STDSEQ
 
     "---Ranger de ano do documento
-    lr_gjahr = VALUE #( FOR ls_item IN me->gs_data-item WHERE ( gjr_c_cp  IS NOT INITIAL ) "#EC CI_STDSEQ
+    lr_gjahr = VALUE #( FOR <fs_item> IN me->gs_data-copa WHERE ( gjr_c_cp  IS NOT INITIAL ) "#EC CI_STDSEQ
                             ( option = 'EQ'              "#EC CI_STDSEQ
                               sign   = 'I'               "#EC CI_STDSEQ
-                              low    = ls_item-gjr_c_cp ) ). "#EC CI_STDSEQ
+                              low    = <fs_item>-gjr_c_cp ) ). "#EC CI_STDSEQ
 
     SORT lr_gjahr BY low.
 
@@ -1331,6 +1336,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
     "---Variáveis
     DATA: ls_item LIKE LINE OF me->gs_data-item.
+    DATA: ls_copa LIKE LINE OF me->gs_data-copa.
 
     "---Modifica status para item não processado antes do processamento.
     IF iv_mod_sts_item = abap_true.
@@ -1392,10 +1398,14 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                                                           gjr_c_cp
                                               WHERE guid = me->gv_sheet_guid. "#EC CI_STDSEQ
 
+        "---Limpa CO/PAs
+        CLEAR me->gs_data-copa.
+
       ELSE.
 
         me->gs_data-header-status = gc_bc_status-error_rv."Estornado com Erro
 
+        "---Limpa documentos gerados
         MODIFY me->gs_data-item FROM ls_item TRANSPORTING bln_r_fb
                                                           gjr_r_fb
                                                           bln_r_fb2
@@ -1409,6 +1419,10 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                                                           bln_r_mr3
                                                           gjr_r_mr3
                                                           bln_r_cp
+                                                          gjr_r_cp
+                                             WHERE guid = me->gv_sheet_guid. "#EC CI_STDSEQ
+
+        MODIFY me->gs_data-copa FROM ls_copa TRANSPORTING bln_r_cp
                                                           gjr_r_cp
                                              WHERE guid = me->gv_sheet_guid. "#EC CI_STDSEQ
 
@@ -1447,7 +1461,9 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
       MODIFY ztco_banc_imp_pc FROM TABLE me->gs_data-item. "#EC CI_IMUD_NESTED
 
-      MODIFY ztco_banc_imp_lg FROM TABLE me->gt_log.
+      MODIFY ztco_banc_imp_cp FROM TABLE me->gs_data-copa. "#EC CI_IMUD_NESTED
+
+      MODIFY ztco_banc_imp_lg FROM TABLE me->gt_log. "#EC CI_IMUD_NESTED
 
       "---Realiza Commmit dos dados
       CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
@@ -1475,6 +1491,12 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     IF me->gt_log IS NOT INITIAL.
 
       MODIFY ztco_banc_imp_lg FROM TABLE me->gt_log.
+
+    ENDIF.
+
+    IF me->gs_data-copa IS NOT INITIAL.
+
+      MODIFY ztco_banc_imp_cp FROM TABLE me->gs_data-copa.
 
     ENDIF.
 
@@ -1790,7 +1812,8 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     "---Tabelas
     DATA: lt_inputdata TYPE ty_t_inputdata,
           lt_fieldlist TYPE ty_t_fieldlist,
-          lt_return    TYPE ty_t_return.
+          lt_return    TYPE ty_t_return,
+          lt_copa      TYPE me->ty_s_infor_pc_copa-without_ref.
 
     "---Estruturas
     DATA: ls_document TYPE bapi_pricechange_document,
@@ -1827,198 +1850,223 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     "---Montagem dos dados
     lv_operatingconcern = |AR3C|.
 
-    "---Busca nota
+    "---Realiza busca de CO/PA por referência da nota
     ASSIGN me->gs_inf_pc_copa-nota[ docnum = cs_item-notafiscal "#EC CI_STDSEQ
                                     matnr  = cs_item-material
                                     bwtar  = cs_item-tipoavaliacao ] TO FIELD-SYMBOL(<fs_nota>).
 
-    IF <fs_nota> IS NOT ASSIGNED.
+    IF <fs_nota> IS ASSIGNED.
 
-      "---Marca como erro
-      me->gv_error = abap_true.
-
-      "---Item
-      cs_item-status         = gc_bc_pc_status-itm_nk.
-
-      "---Erro ao lançar CO/PA
-      MESSAGE e009(zco_banco_impostos) INTO DATA(lv_message).
-
-      "---Nota fiscal &1 com Tp.Avl &2, Material &3, não encontrada.
-      MESSAGE e005(zco_banco_impostos) WITH cs_item-notafiscal
-                                         |{ cs_item-tipoavaliacao }|
-                                         |{ cs_item-material }| INTO DATA(lv_message_error).
-      me->insert_log(
-        EXPORTING
-          is_item    = cs_item
-          iv_type    = gc_bc_log_type-warng
-          iv_message = lv_message
-      ).
-
-      me->insert_log(
-        EXPORTING
-          is_item    = cs_item
-          iv_type    = gc_bc_log_type-error
-          iv_message = lv_message_error
-      ).
-
-      RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+      "---Busca dados CO/PA
+      ASSIGN me->gs_inf_pc_copa-with_ref[ rbeln  = <fs_nota>-refkey "#EC CI_STDSEQ
+                                          artnr  = <fs_nota>-matnr  ] TO FIELD-SYMBOL(<fs_copa>).
 
     ENDIF.
 
-    "---Busca dados CO/PA
-    ASSIGN me->gs_inf_pc_copa-with_ref[ rbeln  = <fs_nota>-refkey "#EC CI_STDSEQ
-                                       artnr  = <fs_nota>-matnr  ] TO FIELD-SYMBOL(<fs_copa>).
-
+    "---Busca dados CO/PA sem referência em caso de icms, caso não encontre nas buscas anteriores.
     IF <fs_copa> IS NOT ASSIGNED.
 
-      "---Marca como erro
-      me->gv_error = abap_true.
+      DATA(lv_without_ref) = abap_true.
 
-      "---Item
-      cs_item-status         = gc_bc_pc_status-itm_nk.
+      lt_copa = me->gs_inf_pc_copa-without_ref.
 
-      "---Erro ao lançar CO/PA
-      MESSAGE e009(zco_banco_impostos) INTO lv_message.
+      DELETE lt_copa WHERE perio <> |{ cs_item-data(4) }0{ cs_item-data+4(2) }|
+                        OR artnr <> cs_item-material     "#EC CI_STDSEQ
+                        OR bwtar <> cs_item-tipoavaliacao
+                        OR werks <> cs_item-centro
+                        OR gsber <> cs_item-divisao.
 
-      "---Dados CO/PA não encontrados com documento original &1, material &2.
-      MESSAGE e006(zco_banco_impostos) WITH <fs_nota>-refkey(10)
-                                         |{ <fs_nota>-matnr }| INTO lv_message_error.
+      IF lt_copa IS INITIAL
+      OR me->gs_icms-co_pa <> abap_true.
 
-      me->insert_log(
-       EXPORTING
-         is_item    = cs_item
-         iv_type    = gc_bc_log_type-warng
-         iv_message = lv_message
-     ).
+        "---Marca como erro
+        me->gv_error = abap_true.
 
-      me->insert_log(
-        EXPORTING
-          is_item    = cs_item
-          iv_type    = gc_bc_log_type-error
-          iv_message = lv_message_error
-      ).
+        "---Item
+        cs_item-status         = gc_bc_pc_status-itm_nk.
 
-      RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+        "---Erro ao lançar CO/PA
+        MESSAGE e009(zco_banco_impostos) INTO DATA(lv_message).
 
-    ENDIF.
+        "---Dados CO/PA não encontrados para lançamento.
+        MESSAGE e006(zco_banco_impostos) INTO DATA(lv_message_error).
 
-    DATA(lv_count) = 1.
+        me->insert_log(
+          EXPORTING
+            is_item    = cs_item
+            iv_type    = gc_bc_log_type-warng
+            iv_message = lv_message
+        ).
 
-    "---FieldList
-    insert_data lv_count 'KOKRS'   'AC3C'.
-    insert_data lv_count 'VRGAR'   'Z'.
-    insert_data lv_count 'BUDAT'   cs_item-data.
-    insert_data lv_count 'BUKRS'   cs_item-empresa.
-    insert_data lv_count 'WERKS'   cs_item-centro.
-    insert_data lv_count 'GSBER'   cs_item-divisao.
+        me->insert_log(
+          EXPORTING
+            is_item    = cs_item
+            iv_type    = gc_bc_log_type-error
+            iv_message = lv_message_error
+        ).
 
-    IF  me->gs_icms-co_pa = abap_true.
+        RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
 
-      insert_data lv_count 'VV019' cs_item-valoricms.
+      ELSE.
 
-    ENDIF.
-
-    IF me->gs_icmsst-co_pa = abap_true.
-
-      insert_data lv_count 'VV018' cs_item-valoricmsst.
-
-    ENDIF.
-
-    IF me->gs_ipi-co_pa = abap_true.
-
-      insert_data lv_count 'VV026' cs_item-valoripi.
-
-    ENDIF.
-
-    insert_data lv_count 'ARTNR'     cs_item-material.
-    insert_data lv_count 'BRSCH'     <fs_copa>-brsch.
-    insert_data lv_count 'BZIRK'     <fs_copa>-bzirk.
-    insert_data lv_count 'KDGRP'     <fs_copa>-kdgrp.
-    insert_data lv_count 'KMKDGR'    <fs_copa>-kmkdgr.
-    insert_data lv_count 'KMMAKL'    <fs_copa>-kmmakl.
-    insert_data lv_count 'KMVKBU'    <fs_copa>-kmvkbu.
-    insert_data lv_count 'KMVKGR'    <fs_copa>-kmvkgr.
-    insert_data lv_count 'KMVTNR'    <fs_copa>-kmvtnr.
-    insert_data lv_count 'MATKL'     <fs_copa>-matkl.
-    insert_data lv_count 'PRODH'     <fs_copa>-prodh.
-    insert_data lv_count 'VKBUR'     <fs_copa>-vkbur.
-    insert_data lv_count 'VKGRP'     <fs_copa>-vkgrp.
-    insert_data lv_count 'WWMT1'     <fs_copa>-wwmt1.
-    insert_data lv_count 'WWRPS'     <fs_copa>-wwrps.
-    insert_data lv_count 'WWTPC'     <fs_copa>-wwtpc.
-    insert_data lv_count 'WWMT2'     <fs_copa>-wwmt2.
-    insert_data lv_count 'WWMT3'     <fs_copa>-wwmt3.
-    insert_data lv_count 'WWMT4'     <fs_copa>-wwmt4.
-    insert_data lv_count 'WWMT5'     <fs_copa>-wwmt5.
-    insert_data lv_count 'WWREP'     <fs_copa>-wwrep.
-    insert_data lv_count 'KUNRE'     <fs_copa>-kunre.
-    insert_data lv_count 'PARTNER'   <fs_copa>-partner.
-    insert_data lv_count 'KUNWE'     <fs_copa>-kunwe.
-    insert_data lv_count 'WWM10'     <fs_copa>-wwm10.
-    insert_data lv_count 'WWM11'     <fs_copa>-wwm11.
-    insert_data lv_count 'WWMT9'     <fs_copa>-wwmt9.
-    insert_data lv_count 'BWTAR'     <fs_copa>-bwtar.
-    insert_data lv_count 'FKART'     <fs_copa>-fkart.
-    insert_data lv_count 'VTWEG'     <fs_copa>-vtweg.
-    insert_data lv_count 'KAUFN'     <fs_copa>-kaufn.
-    insert_data lv_count 'SEGMENT'   <fs_copa>-segment.
-    insert_data lv_count 'VKORG'     <fs_copa>-vkorg.
-
-    "---Exporta variável para identificar se será puxado o documento
-    EXPORT lv_program = lv_program TO MEMORY ID 'ZBANC_IMP'.
-
-    CALL FUNCTION 'BAPI_COPAACTUALS_POSTCOSTDATA'
-      EXPORTING
-        operatingconcern = lv_operatingconcern
-        testrun          = lv_testrun
-      TABLES
-        inputdata        = lt_inputdata
-        fieldlist        = lt_fieldlist
-        return           = lt_return.
-
-    "---Trata erro se caso houver
-    IF line_exists( lt_return[ type = 'E' ] ).           "#EC CI_STDSEQ
-
-      "---Marca como erro
-      me->gv_error = abap_true.
-
-      "---Item
-      cs_item-status         = gc_bc_pc_status-itm_nk.
-
-      "---Cabeçalho
-      me->gs_data-header-last_changed_by = sy-uname.
-      me->gs_data-header-last_changed_at = me->gv_times.
-
-      APPEND INITIAL LINE TO lt_return ASSIGNING FIELD-SYMBOL(<fs_ret>).
-
-      "---Erro ao lançar CO/PA
-      <fs_ret>-id     = |ZCO_BANCO_IMPOSTOS|.
-      <fs_ret>-number = |009|.
-      <fs_ret>-type   = gc_bc_log_type-warng.
-
-      SORT lt_return DESCENDING BY type.
-
-      me->insert_log(
-        EXPORTING
-          is_item    = cs_item
-          it_bapiret = lt_return
-      ).
-
-      RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
-
-    ELSE.
-
-      IMPORT ls_copa = ls_copa FROM MEMORY ID 'ZBANC_IMP_COPA'.
-
-      IF sy-subrc IS INITIAL.
-
-        cs_item-status           = gc_bc_pc_status-itm_ok.
-        cs_item-bln_c_cp         = ls_copa-belnr.
-        cs_item-gjr_c_cp         = ls_copa-gjahr.
+        "---Cálcula valor para rateio
+        DATA(lv_val_tot_rateio) = REDUCE rke2_erlos( INIT lv_vl TYPE rke2_erlos FOR <fs_cp> IN lt_copa NEXT lv_vl = lv_vl + <fs_cp>-erlos ).
 
       ENDIF.
 
+    ELSE.
+
+      APPEND <fs_copa> TO lt_copa.
+
     ENDIF.
+
+    LOOP AT lt_copa ASSIGNING <fs_copa>.
+
+      CLEAR: lt_fieldlist,
+             lt_inputdata.
+
+      DATA(lv_count) = 1.
+
+      "---FieldList
+      insert_data lv_count 'KOKRS'   'AC3C'.
+      insert_data lv_count 'VRGAR'   'Z'.
+      insert_data lv_count 'BUDAT'   cs_item-data.
+      insert_data lv_count 'BUKRS'   cs_item-empresa.
+      insert_data lv_count 'WERKS'   cs_item-centro.
+      insert_data lv_count 'GSBER'   cs_item-divisao.
+
+      IF  me->gs_icms-co_pa = abap_true.
+
+        IF lv_without_ref = abap_true.
+
+          "---Porcentagem
+          DATA(lv_percent) = CONV p10_perct( <fs_copa>-erlos / lv_val_tot_rateio ).
+
+          "---Valor
+          DATA(lv_icms) = CONV netpr( cs_item-valoricms * lv_percent ).
+
+          insert_data lv_count 'VV019' lv_icms.
+
+        ELSE.
+
+          insert_data lv_count 'VV019' cs_item-valoricms.
+
+        ENDIF.
+
+      ENDIF.
+
+      IF me->gs_icmsst-co_pa = abap_true.
+
+        insert_data lv_count 'VV018' cs_item-valoricmsst.
+
+      ENDIF.
+
+      IF me->gs_ipi-co_pa = abap_true.
+
+        insert_data lv_count 'VV026' cs_item-valoripi.
+
+      ENDIF.
+
+      insert_data lv_count 'ARTNR'     cs_item-material.
+      insert_data lv_count 'BRSCH'     <fs_copa>-brsch.
+      insert_data lv_count 'BZIRK'     <fs_copa>-bzirk.
+      insert_data lv_count 'KDGRP'     <fs_copa>-kdgrp.
+      insert_data lv_count 'KMKDGR'    <fs_copa>-kmkdgr.
+      insert_data lv_count 'KMMAKL'    <fs_copa>-kmmakl.
+      insert_data lv_count 'KMVKBU'    <fs_copa>-kmvkbu.
+      insert_data lv_count 'KMVKGR'    <fs_copa>-kmvkgr.
+      insert_data lv_count 'KMVTNR'    <fs_copa>-kmvtnr.
+      insert_data lv_count 'MATKL'     <fs_copa>-matkl.
+      insert_data lv_count 'PRODH'     <fs_copa>-prodh.
+      insert_data lv_count 'VKBUR'     <fs_copa>-vkbur.
+      insert_data lv_count 'VKGRP'     <fs_copa>-vkgrp.
+      insert_data lv_count 'WWMT1'     <fs_copa>-wwmt1.
+      insert_data lv_count 'WWRPS'     <fs_copa>-wwrps.
+      insert_data lv_count 'WWTPC'     <fs_copa>-wwtpc.
+      insert_data lv_count 'WWMT2'     <fs_copa>-wwmt2.
+      insert_data lv_count 'WWMT3'     <fs_copa>-wwmt3.
+      insert_data lv_count 'WWMT4'     <fs_copa>-wwmt4.
+      insert_data lv_count 'WWMT5'     <fs_copa>-wwmt5.
+      insert_data lv_count 'WWREP'     <fs_copa>-wwrep.
+      insert_data lv_count 'KUNRE'     <fs_copa>-kunre.
+      insert_data lv_count 'PARTNER'   <fs_copa>-partner.
+      insert_data lv_count 'KUNWE'     <fs_copa>-kunwe.
+      insert_data lv_count 'WWM10'     <fs_copa>-wwm10.
+      insert_data lv_count 'WWM11'     <fs_copa>-wwm11.
+      insert_data lv_count 'WWMT9'     <fs_copa>-wwmt9.
+      insert_data lv_count 'BWTAR'     <fs_copa>-bwtar.
+      insert_data lv_count 'FKART'     <fs_copa>-fkart.
+      insert_data lv_count 'VTWEG'     <fs_copa>-vtweg.
+      insert_data lv_count 'KAUFN'     <fs_copa>-kaufn.
+      insert_data lv_count 'SEGMENT'   <fs_copa>-segment.
+      insert_data lv_count 'VKORG'     <fs_copa>-vkorg.
+
+      "---Exporta variável para identificar se será puxado o documento
+      EXPORT lv_program = lv_program TO MEMORY ID 'ZBANC_IMP'.
+
+      CALL FUNCTION 'BAPI_COPAACTUALS_POSTCOSTDATA'
+        EXPORTING
+          operatingconcern = lv_operatingconcern
+          testrun          = lv_testrun
+        TABLES
+          inputdata        = lt_inputdata
+          fieldlist        = lt_fieldlist
+          return           = lt_return.
+
+      "---Trata erro se caso houver
+      IF line_exists( lt_return[ type = 'E' ] ).         "#EC CI_STDSEQ
+
+        "---Marca como erro
+        me->gv_error = abap_true.
+
+        "---Item
+        cs_item-status         = gc_bc_pc_status-itm_nk.
+
+        "---Cabeçalho
+        me->gs_data-header-last_changed_by = sy-uname.
+        me->gs_data-header-last_changed_at = me->gv_times.
+
+        APPEND INITIAL LINE TO lt_return ASSIGNING FIELD-SYMBOL(<fs_ret>).
+
+        "---Erro ao lançar CO/PA
+        <fs_ret>-id     = |ZCO_BANCO_IMPOSTOS|.
+        <fs_ret>-number = |009|.
+        <fs_ret>-type   = gc_bc_log_type-warng.
+
+        SORT lt_return DESCENDING BY type.             "#EC CI_SORTLOOP
+
+        me->insert_log(
+          EXPORTING
+            is_item    = cs_item
+            it_bapiret = lt_return
+        ).
+
+        RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+
+      ELSE.
+
+        IMPORT ls_copa = ls_copa FROM MEMORY ID 'ZBANC_IMP_COPA'.
+
+        IF sy-subrc IS INITIAL.
+
+          APPEND INITIAL LINE TO me->gs_data-copa ASSIGNING FIELD-SYMBOL(<fs_doc_copa>).
+
+          TRY.
+              <fs_doc_copa>-guid     = cs_item-guid.
+              <fs_doc_copa>-guiditem = cs_item-guiditem.
+              <fs_doc_copa>-guidcp  = NEW cl_system_uuid( )->if_system_uuid~create_uuid_x16( ).
+            CATCH cx_uuid_error.
+          ENDTRY.
+
+          cs_item-status           = gc_bc_pc_status-itm_ok.
+          <fs_doc_copa>-bln_c_cp   = ls_copa-belnr.
+          <fs_doc_copa>-gjr_c_cp   = ls_copa-gjahr.
+
+        ENDIF.
+
+      ENDIF.
+
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -2356,13 +2404,8 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     FIELD-SYMBOLS: <fs_field> LIKE LINE OF lt_fieldlist,
                    <fs_input> LIKE LINE OF lt_inputdata.
 
-    CHECK cs_item-bln_c_cp IS NOT INITIAL
-      AND cs_item-gjr_c_cp IS NOT INITIAL
-      AND cs_item-bln_r_cp IS INITIAL
-      AND cs_item-gjr_r_cp IS INITIAL.
-
-    "---Marca flag para salvar
-    me->gv_save = abap_true.
+    CHECK line_exists( me->gs_data-copa[ guid     = cs_item-guid
+                                         guiditem = cs_item-guiditem ] ).
 
     "---Inserção dos campos e dados CO/PA
     DEFINE insert_data.
@@ -2382,168 +2425,188 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     "---Montagem dos dados
     lv_operatingconcern = |AR3C|.
 
-    "---Busca dados CO/PA
-    ASSIGN me->gs_inf_rv_copa-ce1ar3c[ belnr = cs_item-bln_c_cp "#EC CI_STDSEQ
-                                       gjahr = cs_item-gjr_c_cp ] TO FIELD-SYMBOL(<fs_copa>).
+    LOOP AT me->gs_data-copa ASSIGNING FIELD-SYMBOL(<fs_doc_copa>) WHERE guid = cs_item-guid
+                                                                     AND guiditem = cs_item-guiditem.
 
-    IF <fs_copa> IS NOT ASSIGNED.
+      CHECK <fs_doc_copa>-bln_c_cp IS NOT INITIAL
+        AND <fs_doc_copa>-gjr_c_cp IS NOT INITIAL
+        AND <fs_doc_copa>-bln_r_cp IS INITIAL
+        AND <fs_doc_copa>-gjr_r_cp IS INITIAL.
 
-      "---Marca como erro
-      me->gv_error = abap_true.
+      "---Marca flag para salvar
+      me->gv_save = abap_true.
 
-      "---Item
-      cs_item-status         = gc_bc_pc_status-itm_nk.
+      "---Busca dados CO/PA
+      ASSIGN me->gs_inf_rv_copa-ce1ar3c[ belnr = <fs_doc_copa>-bln_c_cp "#EC CI_STDSEQ
+                                         gjahr = <fs_doc_copa>-gjr_c_cp ] TO FIELD-SYMBOL(<fs_copa>).
 
-      "---Erro ao estornar CO/PA
-      MESSAGE e012(zco_banco_impostos) INTO DATA(lv_message).
 
-      "---Dados CO/PA não encontrados com docnumento &1, ano &2.
-      MESSAGE e014(zco_banco_impostos) WITH cs_item-bln_c_cp cs_item-gjr_c_cp
-                                       INTO DATA(lv_message_error).
+      IF <fs_copa> IS NOT ASSIGNED.
 
-      me->insert_log(
-        EXPORTING
-          is_item    = cs_item
-          iv_type    = gc_bc_log_type-warng
-          iv_message = lv_message
-      ).
+        "---Marca como erro
+        me->gv_error = abap_true.
 
-      me->insert_log(
-        EXPORTING
-          is_item    = cs_item
-          iv_type    = gc_bc_log_type-error
-          iv_message = lv_message_error
-      ).
+        "---Item
+        cs_item-status         = gc_bc_pc_status-itm_nk.
 
-      RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+        "---Erro ao estornar CO/PA, documento: &1, ano: &2.
+        MESSAGE e012(zco_banco_impostos) INTO DATA(lv_message) WITH <fs_doc_copa>-bln_c_cp
+                                                                    <fs_doc_copa>-gjr_c_cp.
 
-    ENDIF.
+        "---Dados CO/PA não encontrados com docnumento &1, ano &2.
+        MESSAGE e014(zco_banco_impostos) WITH <fs_doc_copa>-bln_c_cp <fs_doc_copa>-gjr_c_cp
+                                         INTO DATA(lv_message_error).
 
-    DATA(lv_count) = 1.
+        me->insert_log(
+          EXPORTING
+            is_item    = cs_item
+            iv_type    = gc_bc_log_type-warng
+            iv_message = lv_message
+        ).
 
-    "---Valores
-    DATA(lv_icms)   = <fs_copa>-vv019.
-    lv_icms   = lv_icms * -1.
-    DATA(lv_icmsst) = <fs_copa>-vv018.
-    lv_icmsst = lv_icmsst * -1.
-    DATA(lv_ipi)    = <fs_copa>-vv026.
-    lv_ipi    = lv_ipi * -1.
+        me->insert_log(
+          EXPORTING
+            is_item    = cs_item
+            iv_type    = gc_bc_log_type-error
+            iv_message = lv_message_error
+        ).
 
-    "---FieldList
-    insert_data lv_count 'KOKRS'   <fs_copa>-kokrs.
-    insert_data lv_count 'VRGAR'   <fs_copa>-vrgar.
-    insert_data lv_count 'BUDAT'   <fs_copa>-budat.
-    insert_data lv_count 'BUKRS'   <fs_copa>-bukrs.
-    insert_data lv_count 'WERKS'   <fs_copa>-werks.
-    insert_data lv_count 'GSBER'   <fs_copa>-gsber.
-
-    IF lv_icms IS NOT INITIAL.
-
-      insert_data lv_count 'VV019' lv_icms.
-
-    ENDIF.
-
-    IF lv_icmsst IS NOT INITIAL.
-
-      insert_data lv_count 'VV018' lv_icmsst.
-
-    ENDIF.
-
-    IF lv_ipi IS NOT INITIAL.
-
-      insert_data lv_count 'VV026' lv_ipi.
-
-    ENDIF.
-
-    insert_data lv_count 'ARTNR'     <fs_copa>-artnr.
-    insert_data lv_count 'BRSCH'     <fs_copa>-brsch.
-    insert_data lv_count 'BZIRK'     <fs_copa>-bzirk.
-    insert_data lv_count 'KDGRP'     <fs_copa>-kdgrp.
-    insert_data lv_count 'KMKDGR'    <fs_copa>-kmkdgr.
-    insert_data lv_count 'KMMAKL'    <fs_copa>-kmmakl.
-    insert_data lv_count 'KMVKBU'    <fs_copa>-kmvkbu.
-    insert_data lv_count 'KMVKGR'    <fs_copa>-kmvkgr.
-    insert_data lv_count 'KMVTNR'    <fs_copa>-kmvtnr.
-    insert_data lv_count 'MATKL'     <fs_copa>-matkl.
-    insert_data lv_count 'PRODH'     <fs_copa>-prodh.
-    insert_data lv_count 'VKBUR'     <fs_copa>-vkbur.
-    insert_data lv_count 'VKGRP'     <fs_copa>-vkgrp.
-    insert_data lv_count 'WWMT1'     <fs_copa>-wwmt1.
-    insert_data lv_count 'WWRPS'     <fs_copa>-wwrps.
-    insert_data lv_count 'WWTPC'     <fs_copa>-wwtpc.
-    insert_data lv_count 'WWMT2'     <fs_copa>-wwmt2.
-    insert_data lv_count 'WWMT3'     <fs_copa>-wwmt3.
-    insert_data lv_count 'WWMT4'     <fs_copa>-wwmt4.
-    insert_data lv_count 'WWMT5'     <fs_copa>-wwmt5.
-    insert_data lv_count 'WWREP'     <fs_copa>-wwrep.
-    insert_data lv_count 'KUNRE'     <fs_copa>-kunre.
-    insert_data lv_count 'PARTNER'   <fs_copa>-partner.
-    insert_data lv_count 'KUNWE'     <fs_copa>-kunwe.
-    insert_data lv_count 'WWM10'     <fs_copa>-wwm10.
-    insert_data lv_count 'WWM11'     <fs_copa>-wwm11.
-    insert_data lv_count 'WWMT9'     <fs_copa>-wwmt9.
-    insert_data lv_count 'BWTAR'     <fs_copa>-bwtar.
-    insert_data lv_count 'FKART'     <fs_copa>-fkart.
-    insert_data lv_count 'VTWEG'     <fs_copa>-vtweg.
-    insert_data lv_count 'KAUFN'     <fs_copa>-kaufn.
-    insert_data lv_count 'SEGMENT'   <fs_copa>-segment.
-    insert_data lv_count 'VKORG'     <fs_copa>-vkorg.
-
-    "---Exporta variável para identificar se será puxado o documento
-    EXPORT lv_program = lv_program TO MEMORY ID 'ZBANC_IMP'.
-
-    CALL FUNCTION 'BAPI_COPAACTUALS_POSTCOSTDATA'
-      EXPORTING
-        operatingconcern = lv_operatingconcern
-        testrun          = lv_testrun
-      TABLES
-        inputdata        = lt_inputdata
-        fieldlist        = lt_fieldlist
-        return           = lt_return.
-
-    "---Trata erro se caso houver
-    IF line_exists( lt_return[ type = 'E' ] ).           "#EC CI_STDSEQ
-
-      "---Marca como erro
-      me->gv_error = abap_true.
-
-      "---Item
-      cs_item-status         = gc_bc_pc_status-itm_nk.
-
-      "---Cabeçalho
-      me->gs_data-header-last_changed_by = sy-uname.
-      me->gs_data-header-last_changed_at = me->gv_times.
-
-      APPEND INITIAL LINE TO lt_return ASSIGNING FIELD-SYMBOL(<fs_ret>).
-
-      "---Erro ao estornar CO/PA
-      <fs_ret>-id     = |ZCO_BANCO_IMPOSTOS|.
-      <fs_ret>-number = |012|.
-      <fs_ret>-type   = gc_bc_log_type-warng.
-
-      SORT lt_return DESCENDING BY type.
-
-      me->insert_log(
-        EXPORTING
-          is_item    = cs_item
-          it_bapiret = lt_return
-      ).
-
-      RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
-
-    ELSE.
-
-      IMPORT ls_copa = ls_copa FROM MEMORY ID 'ZBANC_IMP_COPA'.
-
-      IF sy-subrc IS INITIAL.
-
-        cs_item-status           = gc_bc_pc_status-itm_ok.
-        cs_item-bln_r_cp         = ls_copa-belnr.
-        cs_item-gjr_r_cp         = ls_copa-gjahr.
+        RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
 
       ENDIF.
 
-    ENDIF.
+      CLEAR: lt_fieldlist,
+             lt_inputdata.
+
+      DATA(lv_count) = 1.
+
+      "---Valores
+      DATA(lv_icms)   = <fs_copa>-vv019.
+      lv_icms   = lv_icms * -1.
+      DATA(lv_icmsst) = <fs_copa>-vv018.
+      lv_icmsst = lv_icmsst * -1.
+      DATA(lv_ipi)    = <fs_copa>-vv026.
+      lv_ipi    = lv_ipi * -1.
+
+      "---FieldList
+      insert_data lv_count 'KOKRS'   <fs_copa>-kokrs.
+      insert_data lv_count 'VRGAR'   <fs_copa>-vrgar.
+      insert_data lv_count 'BUDAT'   <fs_copa>-budat.
+      insert_data lv_count 'BUKRS'   <fs_copa>-bukrs.
+      insert_data lv_count 'WERKS'   <fs_copa>-werks.
+      insert_data lv_count 'GSBER'   <fs_copa>-gsber.
+
+      IF lv_icms IS NOT INITIAL.
+
+        insert_data lv_count 'VV019' lv_icms.
+
+      ENDIF.
+
+      IF lv_icmsst IS NOT INITIAL.
+
+        insert_data lv_count 'VV018' lv_icmsst.
+
+      ENDIF.
+
+      IF lv_ipi IS NOT INITIAL.
+
+        insert_data lv_count 'VV026' lv_ipi.
+
+      ENDIF.
+
+      insert_data lv_count 'ARTNR'     <fs_copa>-artnr.
+      insert_data lv_count 'BRSCH'     <fs_copa>-brsch.
+      insert_data lv_count 'BZIRK'     <fs_copa>-bzirk.
+      insert_data lv_count 'KDGRP'     <fs_copa>-kdgrp.
+      insert_data lv_count 'KMKDGR'    <fs_copa>-kmkdgr.
+      insert_data lv_count 'KMMAKL'    <fs_copa>-kmmakl.
+      insert_data lv_count 'KMVKBU'    <fs_copa>-kmvkbu.
+      insert_data lv_count 'KMVKGR'    <fs_copa>-kmvkgr.
+      insert_data lv_count 'KMVTNR'    <fs_copa>-kmvtnr.
+      insert_data lv_count 'MATKL'     <fs_copa>-matkl.
+      insert_data lv_count 'PRODH'     <fs_copa>-prodh.
+      insert_data lv_count 'VKBUR'     <fs_copa>-vkbur.
+      insert_data lv_count 'VKGRP'     <fs_copa>-vkgrp.
+      insert_data lv_count 'WWMT1'     <fs_copa>-wwmt1.
+      insert_data lv_count 'WWRPS'     <fs_copa>-wwrps.
+      insert_data lv_count 'WWTPC'     <fs_copa>-wwtpc.
+      insert_data lv_count 'WWMT2'     <fs_copa>-wwmt2.
+      insert_data lv_count 'WWMT3'     <fs_copa>-wwmt3.
+      insert_data lv_count 'WWMT4'     <fs_copa>-wwmt4.
+      insert_data lv_count 'WWMT5'     <fs_copa>-wwmt5.
+      insert_data lv_count 'WWREP'     <fs_copa>-wwrep.
+      insert_data lv_count 'KUNRE'     <fs_copa>-kunre.
+      insert_data lv_count 'PARTNER'   <fs_copa>-partner.
+      insert_data lv_count 'KUNWE'     <fs_copa>-kunwe.
+      insert_data lv_count 'WWM10'     <fs_copa>-wwm10.
+      insert_data lv_count 'WWM11'     <fs_copa>-wwm11.
+      insert_data lv_count 'WWMT9'     <fs_copa>-wwmt9.
+      insert_data lv_count 'BWTAR'     <fs_copa>-bwtar.
+      insert_data lv_count 'FKART'     <fs_copa>-fkart.
+      insert_data lv_count 'VTWEG'     <fs_copa>-vtweg.
+      insert_data lv_count 'KAUFN'     <fs_copa>-kaufn.
+      insert_data lv_count 'SEGMENT'   <fs_copa>-segment.
+      insert_data lv_count 'VKORG'     <fs_copa>-vkorg.
+
+      "---Exporta variável para identificar se será puxado o documento
+      EXPORT lv_program = lv_program TO MEMORY ID 'ZBANC_IMP'.
+
+      CALL FUNCTION 'BAPI_COPAACTUALS_POSTCOSTDATA'
+        EXPORTING
+          operatingconcern = lv_operatingconcern
+          testrun          = lv_testrun
+        TABLES
+          inputdata        = lt_inputdata
+          fieldlist        = lt_fieldlist
+          return           = lt_return.
+
+      "---Trata erro se caso houver
+      IF line_exists( lt_return[ type = 'E' ] ).         "#EC CI_STDSEQ
+
+        "---Marca como erro
+        me->gv_error = abap_true.
+
+        "---Item
+        cs_item-status         = gc_bc_pc_status-itm_nk.
+
+        "---Cabeçalho
+        me->gs_data-header-last_changed_by = sy-uname.
+        me->gs_data-header-last_changed_at = me->gv_times.
+
+        APPEND INITIAL LINE TO lt_return ASSIGNING FIELD-SYMBOL(<fs_ret>).
+
+        "---Erro ao estornar CO/PA, documento: &1, ano: &2.
+        <fs_ret>-id     = |ZCO_BANCO_IMPOSTOS|.
+        <fs_ret>-number = |012|.
+        <fs_ret>-type   = gc_bc_log_type-warng.
+        <fs_ret>-message_v1 = <fs_doc_copa>-bln_c_cp.
+        <fs_ret>-message_v2 = <fs_doc_copa>-gjr_c_cp.
+
+        SORT lt_return DESCENDING BY type.
+
+        me->insert_log(
+          EXPORTING
+            is_item    = cs_item
+            it_bapiret = lt_return
+        ).
+
+        RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+
+      ELSE.
+
+        IMPORT ls_copa = ls_copa FROM MEMORY ID 'ZBANC_IMP_COPA'.
+
+        IF sy-subrc IS INITIAL.
+
+          cs_item-status           = gc_bc_pc_status-itm_ok.
+          <fs_doc_copa>-bln_r_cp         = ls_copa-belnr.
+          <fs_doc_copa>-gjr_r_cp         = ls_copa-gjahr.
+
+        ENDIF.
+
+      ENDIF.
+
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -2556,34 +2619,48 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
       IF <fs_cfg_icms> IS NOT ASSIGNED.
 
-        "---Marca como erro
-        me->gv_error = abap_true.
+        ASSIGN me->gt_cfg[ codigo     = cs_item-codigocenario "#EC CI_STDSEQ
+                           elem_custo = gc_bc_elem_cust-icms2    ] TO <fs_cfg_icms>.
 
-        CLEAR me->gs_icms.
+        IF <fs_cfg_icms> IS NOT ASSIGNED.
 
-        "---Marca cabeçalho e item com erro
-        me->gs_data-header-status = gc_bc_status-error_pc.
-        cs_item-status          = gc_bc_pc_status-itm_nk.
+          ASSIGN me->gt_cfg[ codigo     = cs_item-codigocenario "#EC CI_STDSEQ
+                           elem_custo = gc_bc_elem_cust-icms2    ] TO <fs_cfg_icms>.
 
-        "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
-        MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icms
-                                           |{ cs_item-codigocenario }|
-                                           |{ gc_bc_elem_cust-icms1 }| INTO DATA(lv_message).
+          IF <fs_cfg_icms> IS NOT ASSIGNED.
 
-        me->insert_log(
-          EXPORTING
-            is_item    = cs_item
-            iv_type    = gc_bc_log_type-error
-            iv_message = lv_message
-        ).
 
-        RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+            "---Marca como erro
+            me->gv_error = abap_true.
 
-      ELSE.
+            CLEAR me->gs_icms.
 
-        me->gs_icms = <fs_cfg_icms>.
+            "---Marca cabeçalho e item com erro
+            me->gs_data-header-status = gc_bc_status-error_pc.
+            cs_item-status          = gc_bc_pc_status-itm_nk.
+
+            "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
+            MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icms
+                                               |{ cs_item-codigocenario }|
+                                               |{ gc_bc_elem_cust-icms1 }, { gc_bc_elem_cust-icms2 }, { gc_bc_elem_cust-icms3 }| INTO DATA(lv_message).
+
+            me->insert_log(
+              EXPORTING
+                is_item    = cs_item
+                iv_type    = gc_bc_log_type-error
+                iv_message = lv_message
+            ).
+
+            RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+
+          ENDIF.
+
+        ENDIF.
 
       ENDIF.
+
+      "---Atribui a configuração
+      me->gs_icms = <fs_cfg_icms>.
 
     ELSE.
 
@@ -2598,34 +2675,40 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
       IF <fs_cfg_icmsst> IS NOT ASSIGNED.
 
-        "---Marca como erro
-        me->gv_error = abap_true.
+        ASSIGN me->gt_cfg[ codigo     = cs_item-codigocenario "#EC CI_STDSEQ
+                           elem_custo = gc_bc_elem_cust-icmsst2 ] TO <fs_cfg_icmsst>.
 
-        CLEAR me->gs_icmsst.
+        IF <fs_cfg_icmsst> IS NOT ASSIGNED.
 
-        "---Marca cabeçalho e item com erro
-        me->gs_data-header-status = gc_bc_status-error_pc.
-        cs_item-status          = gc_bc_pc_status-itm_nk.
+          "---Marca como erro
+          me->gv_error = abap_true.
 
-        "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
-        MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icmsst
-                                           |{ cs_item-codigocenario }|
-                                           |{ gc_bc_elem_cust-icmsst1 }| INTO lv_message.
+          CLEAR me->gs_icmsst.
 
-        me->insert_log(
-          EXPORTING
-            is_item    = cs_item
-            iv_type    = gc_bc_log_type-error
-            iv_message = lv_message
-        ).
+          "---Marca cabeçalho e item com erro
+          me->gs_data-header-status = gc_bc_status-error_pc.
+          cs_item-status            = gc_bc_pc_status-itm_nk.
 
-        RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+          "---Config. não encontrada para lançamento de &1, códgo cenário &2, Ele.C &3.
+          MESSAGE e004(zco_banco_impostos) WITH me->gc_bc_lancs-icmsst
+                                             |{ cs_item-codigocenario }|
+                                             |{ gc_bc_elem_cust-icmsst1 }, { gc_bc_elem_cust-icmsst2 }| INTO lv_message.
 
-      ELSE.
+          me->insert_log(
+            EXPORTING
+              is_item    = cs_item
+              iv_type    = gc_bc_log_type-error
+              iv_message = lv_message
+          ).
 
-        me->gs_icmsst = <fs_cfg_icmsst>.
+          RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+
+        ENDIF.
 
       ENDIF.
+
+      "---Atribui configuração
+      me->gs_icmsst = <fs_cfg_icmsst>.
 
     ELSE.
 
@@ -2663,11 +2746,10 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
         RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
 
-      ELSE.
-
-        me->gs_ipi = <fs_cfg_ipi>.
-
       ENDIF.
+
+      "---Atribui configuração
+      me->gs_ipi = <fs_cfg_ipi>.
 
     ELSE.
 

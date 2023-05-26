@@ -48,7 +48,7 @@
      <SPRSL>P</SPRSL>
      <ARBGB>ZCO_BANCO_IMPOSTOS</ARBGB>
      <MSGNR>006</MSGNR>
-     <TEXT>Dados CO/PA não encontrados com documento original &amp;1, material &amp;2.</TEXT>
+     <TEXT>Dados CO/PA não encontrados para lançamento.</TEXT>
     </T100>
     <T100>
      <SPRSL>P</SPRSL>
@@ -84,7 +84,7 @@
      <SPRSL>P</SPRSL>
      <ARBGB>ZCO_BANCO_IMPOSTOS</ARBGB>
      <MSGNR>012</MSGNR>
-     <TEXT>Erro ao estornar CO/PA</TEXT>
+     <TEXT>Erro ao estornar CO/PA, documento: &amp;1, ano: &amp;2.</TEXT>
     </T100>
     <T100>
      <SPRSL>P</SPRSL>
