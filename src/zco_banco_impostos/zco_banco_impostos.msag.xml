@@ -96,7 +96,7 @@
      <SPRSL>P</SPRSL>
      <ARBGB>ZCO_BANCO_IMPOSTOS</ARBGB>
      <MSGNR>014</MSGNR>
-     <TEXT>Dados CO/PA não encontrados com docnumento &amp;1, ano &amp;2.</TEXT>
+     <TEXT>Dados CO/PA não encontrados com documento &amp;1, ano &amp;2.</TEXT>
     </T100>
    </T100>
   </asx:values>

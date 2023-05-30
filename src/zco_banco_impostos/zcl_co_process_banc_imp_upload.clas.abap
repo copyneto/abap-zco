@@ -718,11 +718,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
               bln_r_mr2,
               gjr_r_mr2,
               bln_r_mr3,
-              gjr_r_mr3,
-              bln_c_cp,
-              gjr_c_cp,
-              bln_r_cp,
-              gjr_r_cp
+              gjr_r_mr3
       WHERE guid = @iv_sheet_guid
       INTO CORRESPONDING FIELDS OF TABLE @rs_data-item.
 
@@ -934,44 +930,48 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
 
       ENDIF.
 
-      "---Busca dados adicionais para lançamento de co/pa sem referência
-      lr_perio = VALUE #( FOR ls_item IN me->gs_data-item
-                             FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
-                                                           AND   co_pa  = abap_true )
-                              ( option = 'EQ'
-                                sign   = 'I'
-                                low    = |{ ls_item-data(4) }0{ ls_item-data+4(2) }| ) ).
+    ENDIF.
 
-      SORT lr_perio BY low.
+    "---Busca dados adicionais para lançamento de co/pa sem referência
+    lr_perio = VALUE #( FOR ls_item IN me->gs_data-item
+                           FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
+                                                         AND   co_pa  = abap_true )
+                            ( option = 'EQ'
+                              sign   = 'I'
+                              low    = |{ ls_item-data(4) }0{ ls_item-data+4(2) }| ) ).
 
-      DELETE ADJACENT DUPLICATES FROM lr_perio COMPARING low.
-      DELETE lr_perio WHERE low IS INITIAL.              "#EC CI_STDSEQ
+    SORT lr_perio BY low.
 
-      "---Busca dados adicionais para lançamento de co/pa sem referência
-      lr_werks = VALUE #( FOR ls_item IN me->gs_data-item
-                             FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
-                                                           AND   co_pa  = abap_true )
-                              ( option = 'EQ'
-                                sign   = 'I'
-                                low    = ls_item-centro ) ).
+    DELETE ADJACENT DUPLICATES FROM lr_perio COMPARING low.
+    DELETE lr_perio WHERE low IS INITIAL.                "#EC CI_STDSEQ
 
-      SORT lr_werks BY low.
+    "---Busca dados adicionais para lançamento de co/pa sem referência
+    lr_werks = VALUE #( FOR ls_item IN me->gs_data-item
+                           FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
+                                                         AND   co_pa  = abap_true )
+                            ( option = 'EQ'
+                              sign   = 'I'
+                              low    = ls_item-centro ) ).
 
-      DELETE ADJACENT DUPLICATES FROM lr_werks COMPARING low.
-      DELETE lr_werks WHERE low IS INITIAL.              "#EC CI_STDSEQ
+    SORT lr_werks BY low.
 
-      "---Busca dados adicionais para lançamento de co/pa sem referência
-      lr_gsber = VALUE #( FOR ls_item IN me->gs_data-item
-                             FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
-                                                           AND   co_pa  = abap_true )
-                              ( option = 'EQ'
-                                sign   = 'I'
-                                low    = ls_item-divisao ) ).
+    DELETE ADJACENT DUPLICATES FROM lr_werks COMPARING low.
+    DELETE lr_werks WHERE low IS INITIAL.                "#EC CI_STDSEQ
 
-      SORT lr_gsber BY low.
+    "---Busca dados adicionais para lançamento de co/pa sem referência
+    lr_gsber = VALUE #( FOR ls_item IN me->gs_data-item
+                           FOR ls_config IN me->gt_cfg WHERE ( codigo = ls_item-codigocenario "#EC CI_STDSEQ
+                                                         AND   co_pa  = abap_true )
+                            ( option = 'EQ'
+                              sign   = 'I'
+                              low    = ls_item-divisao ) ).
 
-      DELETE ADJACENT DUPLICATES FROM lr_gsber COMPARING low.
-      DELETE lr_gsber WHERE low IS INITIAL.              "#EC CI_STDSEQ
+    SORT lr_gsber BY low.
+
+    DELETE ADJACENT DUPLICATES FROM lr_gsber COMPARING low.
+    DELETE lr_gsber WHERE low IS INITIAL.                "#EC CI_STDSEQ
+
+    IF lr_perio[] IS NOT INITIAL.
 
       SELECT FROM ce1ar3c                               "#EC CI_NOFIELD
                                                         "#EC CI_SEL_DEL
@@ -1016,7 +1016,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                 segment,
                 vkorg,
                 erlos
-         WHERE paledger  = '10'
+         WHERE paledger  = '02'
            AND vrgar     = 'F'
            AND sto_belnr = ''
            AND perio IN @lr_perio
@@ -1207,7 +1207,10 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
             vtweg,
             kaufn,
             segment,
-            vkorg
+            vkorg,
+            vv018,
+            vv019,
+            vv026
      WHERE belnr IN @lr_belnr
        AND gjahr IN @lr_gjahr
      INTO CORRESPONDING FIELDS OF TABLE @me->gs_inf_rv_copa-ce1ar3c.
@@ -1394,8 +1397,6 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                                                           gjr_c_mr2
                                                           bln_c_mr3
                                                           gjr_c_mr3
-                                                          bln_c_cp
-                                                          gjr_c_cp
                                               WHERE guid = me->gv_sheet_guid. "#EC CI_STDSEQ
 
         "---Limpa CO/PAs
@@ -1418,8 +1419,6 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                                                           gjr_r_mr2
                                                           bln_r_mr3
                                                           gjr_r_mr3
-                                                          bln_r_cp
-                                                          gjr_r_cp
                                              WHERE guid = me->gv_sheet_guid. "#EC CI_STDSEQ
 
         MODIFY me->gs_data-copa FROM ls_copa TRANSPORTING bln_r_cp
@@ -1828,9 +1827,9 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     FIELD-SYMBOLS: <fs_field> LIKE LINE OF lt_fieldlist,
                    <fs_input> LIKE LINE OF lt_inputdata.
 
-    CHECK me->gs_icms-co_pa   = abap_true
-       OR me->gs_icmsst-co_pa = abap_true
-       OR me->gs_ipi-co_pa    = abap_true.
+    CHECK me->gs_icms-co_pa   = abap_true AND cs_item-valoricms   IS NOT INITIAL
+       OR me->gs_icmsst-co_pa = abap_true AND cs_item-valoricmsst IS NOT INITIAL
+       OR me->gs_ipi-co_pa    = abap_true AND cs_item-valoripi    IS NOT INITIAL.
 
     "---Inserção dos campos e dados CO/PA
     DEFINE insert_data.
@@ -1876,8 +1875,10 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
                         OR werks <> cs_item-centro
                         OR gsber <> cs_item-divisao.
 
+      "---Verifica para permitir lançamento co/pa sem referência apenas para ICMS.
       IF lt_copa IS INITIAL
-      OR me->gs_icms-co_pa <> abap_true.
+      OR me->gs_icmsst-co_pa = abap_true
+      OR me->gs_ipi-co_pa    = abap_true.
 
         "---Marca como erro
         me->gv_error = abap_true.
@@ -1940,7 +1941,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
         IF lv_without_ref = abap_true.
 
           "---Porcentagem
-          DATA(lv_percent) = CONV p10_perct( <fs_copa>-erlos / lv_val_tot_rateio ).
+          DATA(lv_percent) = CONV ze_percent_rate( <fs_copa>-erlos / lv_val_tot_rateio ).
 
           "---Valor
           DATA(lv_icms) = CONV netpr( cs_item-valoricms * lv_percent ).
@@ -2404,7 +2405,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     FIELD-SYMBOLS: <fs_field> LIKE LINE OF lt_fieldlist,
                    <fs_input> LIKE LINE OF lt_inputdata.
 
-    CHECK line_exists( me->gs_data-copa[ guid     = cs_item-guid
+    CHECK line_exists( me->gs_data-copa[ guid     = cs_item-guid  "#EC CI_STDSEQ
                                          guiditem = cs_item-guiditem ] ).
 
     "---Inserção dos campos e dados CO/PA
@@ -2425,7 +2426,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     "---Montagem dos dados
     lv_operatingconcern = |AR3C|.
 
-    LOOP AT me->gs_data-copa ASSIGNING FIELD-SYMBOL(<fs_doc_copa>) WHERE guid = cs_item-guid
+    LOOP AT me->gs_data-copa ASSIGNING FIELD-SYMBOL(<fs_doc_copa>) WHERE guid = cs_item-guid "#EC CI_STDSEQ
                                                                      AND guiditem = cs_item-guiditem.
 
       CHECK <fs_doc_copa>-bln_c_cp IS NOT INITIAL
@@ -2453,7 +2454,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
         MESSAGE e012(zco_banco_impostos) INTO DATA(lv_message) WITH <fs_doc_copa>-bln_c_cp
                                                                     <fs_doc_copa>-gjr_c_cp.
 
-        "---Dados CO/PA não encontrados com docnumento &1, ano &2.
+        "---Dados CO/PA não encontrados com documento &1, ano &2.
         MESSAGE e014(zco_banco_impostos) WITH <fs_doc_copa>-bln_c_cp <fs_doc_copa>-gjr_c_cp
                                          INTO DATA(lv_message_error).
 
@@ -2582,7 +2583,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
         <fs_ret>-message_v1 = <fs_doc_copa>-bln_c_cp.
         <fs_ret>-message_v2 = <fs_doc_copa>-gjr_c_cp.
 
-        SORT lt_return DESCENDING BY type.
+        SORT lt_return DESCENDING BY type. "#EC CI_SORTLOOP
 
         me->insert_log(
           EXPORTING
