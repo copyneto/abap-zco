@@ -2626,7 +2626,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
         IF <fs_cfg_icms> IS NOT ASSIGNED.
 
           ASSIGN me->gt_cfg[ codigo     = cs_item-codigocenario "#EC CI_STDSEQ
-                           elem_custo = gc_bc_elem_cust-icms2    ] TO <fs_cfg_icms>.
+                             elem_custo = gc_bc_elem_cust-icms3    ] TO <fs_cfg_icms>.
 
           IF <fs_cfg_icms> IS NOT ASSIGNED.
 
