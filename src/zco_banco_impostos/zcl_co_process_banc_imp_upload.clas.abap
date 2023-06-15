@@ -1643,7 +1643,63 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     "---Estruturas
     DATA: ls_document TYPE bapi_pricechange_document.
 
+    "---Variáveis
+    DATA: lv_period       TYPE ckmlpp-poper,
+          lv_material(18).
+
+
     CHECK is_config-mr22 = abap_true.
+
+
+    "Verificando se existe registro de saldo para o material, centro e tipo de avaliação
+    "no período informado. Caso não, deverá ser exibido mensagem de erro.
+    lv_period = cs_item-data+4(2).
+
+    SELECT COUNT( * )
+      FROM ckmlpp
+      INNER JOIN ckmlhd
+        ON ckmlhd~kalnr = ckmlpp~kalnr
+      WHERE ckmlhd~matnr = cs_item-material
+        AND ckmlhd~bwkey = cs_item-centro
+        AND ckmlhd~bwtar = cs_item-tipoavaliacao
+        AND ckmlpp~poper = lv_period.
+
+    IF sy-subrc IS NOT INITIAL.
+      "---Marca como erro
+      me->gv_error = abap_true.
+
+      "---Item
+      cs_item-status = gc_bc_pc_status-itm_nk.
+
+      "---Erro ao lançar MR22
+      MESSAGE e008(zco_banco_impostos) INTO DATA(lv_message).
+
+      me->insert_log(
+        EXPORTING
+          is_item    = cs_item
+          iv_type    = gc_bc_log_type-warng
+          iv_message = lv_message
+      ).
+
+      lv_material = cs_item-material.
+      SHIFT lv_material LEFT DELETING LEADING '0'.
+
+      me->insert_log(
+        EXPORTING
+          is_item    = cs_item
+          iv_type    = gc_bc_log_type-error
+          it_bapiret = VALUE #( ( id     = 'ZCO_BANCO_IMPOSTOS'
+                                  number = '015'
+                                  type   = 'E'
+                                  message_v1 = lv_period
+                                  message_v2 = lv_material
+                                  message_v3 = cs_item-tipoavaliacao
+                                  message_v4 = cs_item-centro ) )
+      ).
+
+      RAISE EXCEPTION TYPE zcx_co_process_banc_imp_upload.
+    ENDIF.
+
 
     "---Pega moedas da nota
     CALL FUNCTION 'GET_BWKEY_CURRENCY_INFO'
@@ -1672,7 +1728,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
           WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4 INTO DATA(lv_message_error).
 
       "---Erro ao lançar MR22
-      MESSAGE e008(zco_banco_impostos) INTO DATA(lv_message).
+      MESSAGE e008(zco_banco_impostos) INTO lv_message.
 
       me->insert_log(
         EXPORTING
@@ -2405,7 +2461,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
     FIELD-SYMBOLS: <fs_field> LIKE LINE OF lt_fieldlist,
                    <fs_input> LIKE LINE OF lt_inputdata.
 
-    CHECK line_exists( me->gs_data-copa[ guid     = cs_item-guid  "#EC CI_STDSEQ
+    CHECK line_exists( me->gs_data-copa[ guid     = cs_item-guid "#EC CI_STDSEQ
                                          guiditem = cs_item-guiditem ] ).
 
     "---Inserção dos campos e dados CO/PA
@@ -2583,7 +2639,7 @@ CLASS zcl_co_process_banc_imp_upload IMPLEMENTATION.
         <fs_ret>-message_v1 = <fs_doc_copa>-bln_c_cp.
         <fs_ret>-message_v2 = <fs_doc_copa>-gjr_c_cp.
 
-        SORT lt_return DESCENDING BY type. "#EC CI_SORTLOOP
+        SORT lt_return DESCENDING BY type.             "#EC CI_SORTLOOP
 
         me->insert_log(
           EXPORTING
